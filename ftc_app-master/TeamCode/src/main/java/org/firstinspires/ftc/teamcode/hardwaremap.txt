@@ -1,0 +1,28 @@
+
+Hub 1 ( ):
+    motors:
+        0 frontRight   ("front_right")
+        1 frontLeft    ("front_left")
+        2 backRight    ("back_right")
+        3 backLeft     ("back_left")
+    servos:
+        0 empty
+        1 empty
+        2 empty
+        3 empty
+        4 empty
+        5 empty
+
+Hub 2 ( ):
+    motors:
+        0 empty
+        1 empty
+        2 empty
+        3 empty
+    servos:
+        0 empty
+        1 empty
+        2 empty
+        3 empty
+        4 empty
+        5 empty

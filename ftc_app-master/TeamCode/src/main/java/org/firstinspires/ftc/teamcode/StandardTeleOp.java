@@ -25,6 +25,11 @@ public class StandardTeleOp extends OpMode {
         lv = -gamepad1.left_stick_y;
         rh = -gamepad1.right_stick_x;
 
+        // Square for more control at lower speeds
+        lh = lh * lh;
+        lv = lv * lv;
+        rh = rh * rh;
+
         // calculate motor powers for mecanum drive
         fl = lv + lh + rh;
         fr = lv - lh - rh;

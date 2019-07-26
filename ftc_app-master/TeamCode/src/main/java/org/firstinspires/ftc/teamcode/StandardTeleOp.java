@@ -22,8 +22,8 @@ public class StandardTeleOp extends OpMode {
 
         // set joystick variables
         lh = gamepad1.left_stick_x;
-        lv = gamepad1.left_stick_y;
-        rh = gamepad1.right_stick_x;
+        lv = -gamepad1.left_stick_y;
+        rh = -gamepad1.right_stick_x;
 
         // calculate motor powers for mecanum drive
         fl = lv + lh + rh;

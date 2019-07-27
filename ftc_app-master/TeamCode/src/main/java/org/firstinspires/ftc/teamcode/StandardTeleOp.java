@@ -26,10 +26,7 @@ public class StandardTeleOp extends OpMode {
         lv = -gamepad1.left_stick_y;
         rh = -gamepad1.right_stick_x;
 
-        // Square for more control at lower speeds
-        lh = lh * lh;
-        lv = lv * lv;
-        rh = rh * rh;
+
 
         // calculate motor powers for mecanum drive
         fl = lv + lh + rh;
@@ -53,12 +50,12 @@ public class StandardTeleOp extends OpMode {
         }
 
         if (gamepad1.dpad_left||gamepad2.dpad_left){
-            Robot.gripLeft.setPosition(0);
+            Robot.gripLeft.setPosition(1);
             Robot.gripRight.setPosition(0);
         }
-        
+
         if (gamepad1.dpad_right||gamepad2.dpad_right){
-            Robot.gripLeft.setPosition(1);
+            Robot.gripLeft.setPosition(0);
             Robot.gripRight.setPosition(1);
         }
 

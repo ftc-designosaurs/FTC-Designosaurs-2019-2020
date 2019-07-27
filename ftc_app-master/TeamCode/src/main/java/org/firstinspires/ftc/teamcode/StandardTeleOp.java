@@ -19,6 +19,7 @@ public class StandardTeleOp extends OpMode {
     public void loop() {
         double fr, fl, bl, br; // Motor variables
         double lh, lv, rh;     // Joystick variables
+        double liftSpeed;
 
         // set joystick variables
         lh = gamepad1.left_stick_x;
@@ -41,6 +42,26 @@ public class StandardTeleOp extends OpMode {
         Robot.frontLeft.setPower(fl);
         Robot.backRight.setPower(br);
         Robot.backLeft.setPower(bl);
+
+        //
+        liftSpeed = (gamepad1.right_trigger - gamepad1.left_trigger) +
+                (gamepad2.right_trigger - gamepad2.left_trigger);
+
+        Robot.lift1.setPower(liftSpeed);
+        if (!(gamepad1.x||gamepad2.x)) {
+            Robot.lift2.setPower(liftSpeed);
+        }
+
+        if (gamepad1.dpad_left||gamepad2.dpad_left){
+            Robot.gripLeft.setPosition(0);
+            Robot.gripRight.setPosition(0);
+        }
+        
+        if (gamepad1.dpad_right||gamepad2.dpad_right){
+            Robot.gripLeft.setPosition(1);
+            Robot.gripRight.setPosition(1);
+        }
+
     }
 
     @Override

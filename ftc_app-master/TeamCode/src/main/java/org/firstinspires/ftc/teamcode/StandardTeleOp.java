@@ -25,8 +25,14 @@ public class StandardTeleOp extends OpMode {
         lh = gamepad1.left_stick_x;
         lv = -gamepad1.left_stick_y;
         rh = -gamepad1.right_stick_x;
+        liftSpeed = (gamepad1.right_trigger - gamepad1.left_trigger) +
+                (gamepad2.right_trigger - gamepad2.left_trigger);
 
-
+        // square for exponential drive
+        lh = Robot.square(lh, Robot.power);
+        lv = Robot.square(lv, Robot.power);
+        rh = Robot.square(rh, Robot.power);
+        liftSpeed = Robot.square(liftSpeed, Robot.power);
 
         // calculate motor powers for mecanum drive
         fl = lv + lh + rh;
@@ -39,10 +45,6 @@ public class StandardTeleOp extends OpMode {
         Robot.frontLeft.setPower(fl);
         Robot.backRight.setPower(br);
         Robot.backLeft.setPower(bl);
-
-        //
-        liftSpeed = (gamepad1.right_trigger - gamepad1.left_trigger) +
-                (gamepad2.right_trigger - gamepad2.left_trigger);
 
         Robot.lift1.setPower(liftSpeed);
         if (!(gamepad1.x||gamepad2.x)) {
@@ -58,6 +60,10 @@ public class StandardTeleOp extends OpMode {
             Robot.gripLeft.setPosition(0);
             Robot.gripRight.setPosition(1);
         }
+
+        telemetry.addData("lift1: ",Robot.lift1.getCurrentPosition());
+        telemetry.addData("lift2: ",Robot.lift2.getCurrentPosition());
+        telemetry.update();
 
     }
 

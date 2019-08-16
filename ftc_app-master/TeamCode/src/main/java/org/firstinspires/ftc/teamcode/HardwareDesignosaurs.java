@@ -22,7 +22,8 @@ public class HardwareDesignosaurs {
     // Define Sensors
     
     // Define Variables
-    
+    public int power = 3;
+
     HardwareMap hwMap = null;
     
     public HardwareDesignosaurs() {
@@ -72,8 +73,8 @@ public class HardwareDesignosaurs {
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set Servo Positions
 
@@ -83,4 +84,25 @@ public class HardwareDesignosaurs {
     }
 
     // Functions
+    public double square(double base, int power) { //function that does fractional squaring
+        if (base == 0) {
+            return 0;
+        } else {
+            double basen, based;
+            basen = base; // numerator
+            based = base; // denominator
+
+            // Multiplies numerator
+            for (int i = 0; i < (power+16); i++) {
+                basen *= base;
+            }
+
+            // Multiplies denominator
+            for (int i = 0; i < 16; i++) {
+                based *= base;
+            }
+            return basen/based;
+
+        }
+    }
 }

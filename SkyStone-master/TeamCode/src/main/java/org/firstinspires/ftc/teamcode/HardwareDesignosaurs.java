@@ -39,13 +39,9 @@ public class HardwareDesignosaurs {
         backRight = hwMap.get(DcMotor.class,"back_right");
         backLeft = hwMap.get(DcMotor.class,"back_left");
 
-        lift1 = hwMap.get(DcMotor.class,"lift_1");
-        lift2 = hwMap.get(DcMotor.class,"lift_2");
-
 
         // Initialize Servos
-        gripLeft = hwMap.get(Servo.class, "left_gripper");
-        gripRight = hwMap.get(Servo.class,"right_gripper");
+        gripper = hwMap.get(Servo.class, "left_gripper");
 
         // Initialize Sensors
 

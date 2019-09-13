@@ -46,24 +46,14 @@ public class StandardTeleOp extends OpMode {
         Robot.backRight.setPower(br);
         Robot.backLeft.setPower(bl);
 
-        Robot.lift1.setPower(liftSpeed);
-        if (!(gamepad1.x||gamepad2.x)) {
-            Robot.lift2.setPower(liftSpeed);
-        }
-
+        // set gripper location
         if (gamepad1.dpad_left||gamepad2.dpad_left){
             Robot.gripLeft.setPosition(1);
-            Robot.gripRight.setPosition(0);
         }
 
         if (gamepad1.dpad_right||gamepad2.dpad_right){
             Robot.gripLeft.setPosition(0);
-            Robot.gripRight.setPosition(1);
         }
-
-        telemetry.addData("lift1: ",Robot.lift1.getCurrentPosition());
-        telemetry.addData("lift2: ",Robot.lift2.getCurrentPosition());
-        telemetry.update();
 
     }
 

@@ -16,8 +16,7 @@ public class HardwareDesignosaurs {
     public DcMotor lift2      = null;
 
     // Define Servos
-    public Servo gripLeft     = null;
-    public Servo gripRight    = null;
+    public Servo gripper    = null;
 
     // Define Sensors
     
@@ -74,8 +73,7 @@ public class HardwareDesignosaurs {
 
         // Set Servo Positions
 
-        gripRight.setPosition(0);
-        gripLeft.setPosition(0);
+        gripper.setPosition(0);
 
     }
 

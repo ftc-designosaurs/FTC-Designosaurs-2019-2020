@@ -5,30 +5,27 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HardwareDesignosaurs {
-    
+
     // Define Motors
     public DcMotor frontRight = null;
     public DcMotor frontLeft  = null;
     public DcMotor backRight  = null;
     public DcMotor backLeft   = null;
 
-    public DcMotor lift1      = null;
-    public DcMotor lift2      = null;
-
     // Define Servos
     public Servo gripper    = null;
 
     // Define Sensors
-    
+
     // Define Variables
     public int power = 3;
 
     HardwareMap hwMap = null;
-    
+
     public HardwareDesignosaurs() {
-        
+
     }
-    
+
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
 
@@ -50,26 +47,17 @@ public class HardwareDesignosaurs {
         backRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
 
-        lift1.setDirection(DcMotor.Direction.FORWARD);
-        lift2.setDirection(DcMotor.Direction.FORWARD);
-
         // Stop Motors
         frontRight.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
 
-        lift1.setPower(0);
-        lift2.setPower(0);
-
         // Enable All Encoders
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set Servo Positions
 

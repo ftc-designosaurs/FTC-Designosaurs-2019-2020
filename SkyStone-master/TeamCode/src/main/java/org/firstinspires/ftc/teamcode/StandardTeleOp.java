@@ -10,7 +10,7 @@ public class StandardTeleOp extends OpMode {
 
     @Override
     public void init() {
-        Robot.init(hardwareMap); //initialize motors and sensors
+        Robot.init(hardwareMap, 0, 0, 0); //initialize motors and sensors
 
         telemetry.addData("status: ", "Ready!");
     }

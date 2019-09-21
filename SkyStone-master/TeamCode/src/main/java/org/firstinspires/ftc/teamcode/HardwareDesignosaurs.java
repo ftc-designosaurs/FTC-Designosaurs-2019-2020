@@ -20,13 +20,15 @@ public class HardwareDesignosaurs {
     // Define Variables
     public int power = 3;
 
+    public
+
     HardwareMap hwMap = null;
     
     public HardwareDesignosaurs() {
         
     }
     
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap, int xPos, int yPos, int thetaPos) {
         hwMap = ahwMap;
 
         // Initialize Motors

@@ -23,7 +23,7 @@ public class StandardTeleOp extends OpMode {
         // set joystick variables
         lh = gamepad1.left_stick_x;
         lv = -gamepad1.left_stick_y;
-        rh = -gamepad1.right_stick_x;
+        rh = gamepad1.right_stick_x;
 
         // square for exponential drive
         lh = Robot.square(lh, Robot.power);
@@ -31,8 +31,8 @@ public class StandardTeleOp extends OpMode {
         rh = Robot.square(rh, Robot.power);
 
         // calculate motor powers for mecanum drive
-        fl = lv + lh + rh;
-        fr = lv - lh - rh;
+        fl = -lv + lh + rh;
+        fr = -lv - lh - rh;
         bl = lv - lh + rh;
         br = lv + lh - rh;
 
@@ -43,11 +43,11 @@ public class StandardTeleOp extends OpMode {
         Robot.backLeft.setPower(bl);
 
         // set gripper location
-        if (gamepad1.dpad_left||gamepad2.dpad_left){
+        if (gamepad1.left_trigger > .5||gamepad2.dpad_left){
             Robot.gripper.setPosition(1);
         }
 
-        if (gamepad1.dpad_right||gamepad2.dpad_right){
+        if (gamepad1.right_trigger > .5||gamepad2.dpad_right){
             Robot.gripper.setPosition(0);
         }
 

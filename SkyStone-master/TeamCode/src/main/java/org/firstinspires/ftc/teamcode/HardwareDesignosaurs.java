@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HardwareDesignosaurs {
-
+    
     // Define Motors
     public DcMotor frontRight = null;
     public DcMotor frontLeft  = null;
@@ -16,18 +16,18 @@ public class HardwareDesignosaurs {
     public Servo gripper    = null;
 
     // Define Sensors
-
+    
     // Define Variables
     public int power = 3;
 
     public
 
     HardwareMap hwMap = null;
-
+    
     public HardwareDesignosaurs() {
-
+        
     }
-  
+    
     public void init(HardwareMap ahwMap, int xPos, int yPos, int thetaPos) {
         hwMap = ahwMap;
 

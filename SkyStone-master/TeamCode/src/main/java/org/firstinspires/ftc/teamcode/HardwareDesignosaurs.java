@@ -21,7 +21,11 @@ public class HardwareDesignosaurs {
     public int power = 3;
 
     public double xPos, yPos, thetaPos,
-            deltaFR, deltaFL, deltaBR, deltaBL,j;
+            lastFR, lastFL, lastBR, lastBL, // last positions
+            disFR, disFL, disBR, disBL, // displacements by wheel
+            averageDisplacement, // what it says on the tin
+            devFR, devFL, devBR, devBL, // difference from average
+            deltXr, deltYr, deltXf, deltYf; // deltas in robot and field frame of reference.
 
     public static final double encoder_ticks_per_revolution = 537.6;
     public static final double turn_diameter = 16; // if the wheelbase was a circle, this is the diameter
@@ -105,34 +109,32 @@ public class HardwareDesignosaurs {
 
     public void deadReckoningLoop(HardwareDesignosaurs Robot){
 
-        disFR = (Robot.frontRight - lastFR) * ;
-        //Compute change in encoder positions
-        delt_m0 = wheel0Pos - lastM0;
-        delt_m1 = wheel1Pos - lastM1;
-        delt_m2 = wheel2Pos - lastM2;
-        delt_m3 = wheel3Pos - lastM3;
-//Compute displacements for each wheel
-        displ_m0 = delt_m0 * wheelDisplacePerEncoderCount;
-        displ_m1 = delt_m1 * wheelDisplacePerEncoderCount;
-        displ_m2 = delt_m2 * wheelDisplacePerEncoderCount;
-        displ_m3 = delt_m3 * wheelDisplacePerEncoderCount;
-//Compute the average displacement in order to untangle rotation from displacement
-        displ_average = (displ_m0 + displ_m1 + displ_m2 + displ_m3) / 4.0;
-//Compute the component of the wheel displacements that yield robot displacement
-        dev_m0 = displ_m0 - displ_average;
-        dev_m1 = displ_m1 - displ_average;
-        dev_m2 = displ_m2 - displ_average;
-        dev_m3 = displ_m3 - displ_average;
-//Compute the displacement of the holonomic drive, in robot reference frame
-        delt_Xr = (dev_m0 + dev_m1 - dev_m2 - dev_m3) / twoSqrtTwo;
-        delt_Yr = (dev_m0 - dev_m1 - dev_m2 + dev_m3) / twoSqrtTwo;
-//Move this holonomic displacement from robot to field frame of reference
+        //Compute delta displacement for each wheel
+        disFR = (Robot.frontRight.getCurrentPosition() - lastFR) * encoder_ticks_per_inch;
+        disFL = (Robot.frontRight.getCurrentPosition() - lastFL) * encoder_ticks_per_inch;
+        disBR = (Robot.frontRight.getCurrentPosition() - lastBR) * encoder_ticks_per_inch;
+        disBL = (Robot.frontRight.getCurrentPosition() - lastBL) * encoder_ticks_per_inch;
+
+        //Compute the average displacement in order to untangle rotation from displacement
+        averageDisplacement = (disFR + disFL + disBR + disBL) / 4.0;
+
+        //Compute the component of the wheel displacements that yield robot displacement
+        devFR = disFR - averageDisplacement;
+        devFL = disFL - averageDisplacement;
+        devBR = disBR - averageDisplacement;
+        devBL = disFL - averageDisplacement;
+
+        //Compute the displacement of the holonomic drive, in robot reference frame
+        deltXr = (dev + dev_m1 - dev_m2 - dev_m3) / Math.sqrt(2);
+        deltYr = (dev_m0 - dev_m1 - dev_m2 + dev_m3) / Math.sqrt(2);
+
+        //Move this holonomic displacement from robot to field frame of reference
         robotTheta = IMU_ThetaRAD;
         sinTheta = Math.sin(robotTheta);
         cosTheta = Math.cos(robotTheta);
         delt_Xf = delt_Xr * cosTheta - delt_Yr * sinTheta;
         delt_Yf = delt_Yr * cosTheta + delt_Xr * sinTheta;
-//Update the position
+        //Update the position
         xPos = lastX + delt_Xf;
         yPos = lastY + delt_Yf;
         Theta = robotTheta;

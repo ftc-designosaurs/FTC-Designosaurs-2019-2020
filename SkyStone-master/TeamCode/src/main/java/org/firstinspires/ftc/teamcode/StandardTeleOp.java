@@ -51,6 +51,9 @@ public class StandardTeleOp extends OpMode {
             Robot.gripper.setPosition(0);
         }
 
+        telemetry.addData("X pos", Robot.xPos);
+        telemetry.addData("Y pos", Robot.yPos);
+        telemetry.update();
     }
 
     @Override

@@ -51,6 +51,7 @@ public class StandardTeleOp extends OpMode {
             Robot.gripper.setPosition(.5);
         }
 
+        Robot.deadReckoningLoop(Robot);
         telemetry.addData("X pos", Robot.xPos);
         telemetry.addData("Y pos", Robot.yPos);
         telemetry.update();

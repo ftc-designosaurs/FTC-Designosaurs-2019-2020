@@ -48,7 +48,7 @@ public class StandardTeleOp extends OpMode {
         }
 
         if (gamepad1.right_trigger > .5||gamepad2.dpad_right){
-            Robot.gripper.setPosition(0);
+            Robot.gripper.setPosition(.5);
         }
 
         telemetry.addData("X pos", Robot.xPos);

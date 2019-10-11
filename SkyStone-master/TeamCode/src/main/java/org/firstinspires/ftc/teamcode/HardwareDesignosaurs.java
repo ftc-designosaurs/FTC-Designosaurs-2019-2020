@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,9 +19,14 @@ public class HardwareDesignosaurs {
     // Define Sensors
 
     // Define Variables
+    public double startEncoder;
     public int power = 3;
 
-    public
+    public static final double wheel_diameter = 4;   // inches
+    public static final double encoder_ticks_per_revolution = 537.6;
+    public static final double encoder_ticks_per_inch =
+                    (wheel_diameter * Math.PI)/
+                            encoder_ticks_per_revolution; // used in encoder drive
 
     HardwareMap hwMap = null;
 
@@ -88,5 +94,38 @@ public class HardwareDesignosaurs {
             return basen/based;
 
         }
+    }
+    public void move(String direction, Double speed, Double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
+        startEncoder = Robot.frontRight.getCurrentPosition();
+        if (direction == "forward") {
+            Robot.frontRight.setPower(-speed);
+            Robot.frontLeft.setPower(-speed);
+            Robot.backRight.setPower(speed);
+            Robot.backLeft.setPower(speed);
+        } else if (direction == "backward") {
+            Robot.frontRight.setPower(speed);
+            Robot.frontLeft.setPower(speed);
+            Robot.backRight.setPower(-speed);
+            Robot.backLeft.setPower(-speed);
+        } else if (direction == "left") {
+            Robot.frontRight.setPower(-speed);
+            Robot.frontLeft.setPower(speed);
+            Robot.backRight.setPower(speed);
+            Robot.backLeft.setPower(-speed);
+        } else if (direction == "right") {
+            Robot.frontRight.setPower(speed);
+            Robot.frontLeft.setPower(-speed);
+            Robot.backRight.setPower(-speed);
+            Robot.backLeft.setPower(speed);
+        }
+        while (opMode.opModeIsActive() & (Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch < distance) {
+            opMode.telemetry.addData("inches moved",(Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch);
+            opMode.telemetry.addData("goal",distance);
+            opMode.telemetry.update();
+        }
+        Robot.frontRight.setPower(0);
+        Robot.frontLeft.setPower(0);
+        Robot.backRight.setPower(0);
+        Robot.backLeft.setPower(0);
     }
 }

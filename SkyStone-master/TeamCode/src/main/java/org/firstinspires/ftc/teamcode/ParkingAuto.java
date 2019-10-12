@@ -15,28 +15,10 @@ public class ParkingAuto extends LinearOpMode{
         waitForStart();
         Robot.init(hardwareMap, 0, 0, 0);
 
-        double speed=0.5;
-        Robot.frontRight.setPower(-speed);
-        Robot.frontLeft.setPower(-speed);
-        Robot.backRight.setPower(speed);
-        Robot.backLeft.setPower(speed);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .2)) {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        Robot.frontRight.setPower(-speed);
-        Robot.frontLeft.setPower(speed);
-        Robot.backRight.setPower(speed);
-        Robot.backLeft.setPower(-speed);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < .6)) {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
+        Robot.move("forward", .4, 6.0 ,Robot, this);
+        Robot.move("backward", .4, 6.0 ,Robot, this);
+        Robot.move("left", .4, 6.0 ,Robot, this);
+        Robot.move("right", .4, 6.0 ,Robot, this);
     }
 
 }

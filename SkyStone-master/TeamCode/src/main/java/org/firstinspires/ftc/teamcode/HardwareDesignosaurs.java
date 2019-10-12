@@ -117,8 +117,11 @@ public class HardwareDesignosaurs {
             Robot.frontLeft.setPower(-speed);
             Robot.backRight.setPower(-speed);
             Robot.backLeft.setPower(speed);
+        } else {
+            opMode.telemetry.addData("failure","invalid input");
+            opMode.telemetry.update();
         }
-        while (opMode.opModeIsActive() & (Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch < distance) {
+        while (opMode.opModeIsActive() & Math.abs((Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch) < distance) {
             opMode.telemetry.addData("inches moved",(Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch);
             opMode.telemetry.addData("goal",distance);
             opMode.telemetry.update();

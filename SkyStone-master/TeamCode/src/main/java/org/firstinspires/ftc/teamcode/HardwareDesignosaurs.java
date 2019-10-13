@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class HardwareDesignosaurs {
 
@@ -20,6 +21,10 @@ public class HardwareDesignosaurs {
 
     // Define Variables
     public double startEncoder;
+    public double lastTime = 0;
+    public double deltaTime = 0;
+    public double speed = 0;
+
     public int power = 3;
 
     public static final double wheel_diameter = 4;   // inches
@@ -95,8 +100,32 @@ public class HardwareDesignosaurs {
 
         }
     }
-    public void move(String direction, Double speed, Double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
+
+    public void setSpeeds(Double FR, Double FL, Double BR, Double BL, HardwareDesignosaurs Robot){
+        Robot.frontRight.setPower(FR);
+        Robot.frontLeft.setPower(FL);
+        Robot.backRight.setPower(BR);
+        Robot.backLeft.setPower(BL);
+    }
+
+    public void movePID(String direction, Double distance,HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time){
         startEncoder = Robot.frontRight.getCurrentPosition();
+        double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+        while (error > 1){
+            double s = 1;
+            if (direction == "forward") {         setSpeeds(-speed, -speed, speed, speed, Robot);
+            } else if (direction == "backward") { setSpeeds(speed, speed, -speed, -speed, Robot);
+            } else if (direction == "left") {     setSpeeds(-speed, speed, speed, -speed, Robot);
+            } else if (direction == "right") {    setSpeeds(speed, -speed, -speed, speed, Robot);
+            } else {  opMode.telemetry.addData("invalid","input");
+            }
+        }
+        deltaTime = time.nanoseconds()-lastTime;
+        lastTime = time.nanoseconds();
+
+    }
+
+    public void move(String direction, Double maxSpeed, Double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
         if (direction == "forward") {
             Robot.frontRight.setPower(-speed);
             Robot.frontLeft.setPower(-speed);

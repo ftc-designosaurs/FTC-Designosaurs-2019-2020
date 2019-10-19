@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class HardwareDesignosaurs {
 
@@ -32,6 +38,10 @@ public class HardwareDesignosaurs {
     public static final double encoder_ticks_per_inch =
                     (wheel_diameter * Math.PI)/
                             encoder_ticks_per_revolution; // used in encoder drive
+
+    private static final String VUFORIA_KEY =
+            "AdCuaEX/////AAABmXYJgRHZxkB9gj+81cIaX+JZm4W2w3Ee2HhKucJINnuXQ8l214BoCiyEk04zmQ/1VPvo+8PY7Um3eI5rI4WnSJmEXo7jyMz2WZDkkRnA88uBCtbml8CsMSIS7J3aUcgVd9P8ocLLgwqpavhEEaUixEx/16rgzIEtuHcq5ghQzzCkqR1xvAaxnx5lWM+ixf6hBCfZEnaiUM7WjD4gflO55IpoO/CdCWQrGUw2LuUKW2J+4K6ftKwJ+B1Qdy7pt2tDrGZvMyB4AcphPuoJRCSr5NgRoNWZ+WH5LqAdzYEO0Bv7C9LeSgmSPPT7GPPDpjv6+3DO5BE6l+2uMYQQbuF11BWKKq5Xp+D5Y6l2+W97zpgP";
+    public static final float mmPerInch = 25.4f;
 
     HardwareMap hwMap = null;
 
@@ -101,6 +111,21 @@ public class HardwareDesignosaurs {
         }
     }
 
+    public void initVuforia(boolean showPreview, HardwareMap hardwareMap, LinearOpMode opMode) {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(showPreview ? cameraMonitorViewId : null);
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection   = CAMERA_CHOICE;
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // load skystone data
+        VuforiaTrackables targetsSkyStone = opMode.vuforia.loadTrackablesFromAsset("Skystone");
+        VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
+        stoneTarget.setName("Stone Target");
+
+    }
+
     public void setSpeeds(Double FR, Double FL, Double BR, Double BL, HardwareDesignosaurs Robot){
         Robot.frontRight.setPower(FR);
         Robot.frontLeft.setPower(FL);
@@ -112,7 +137,7 @@ public class HardwareDesignosaurs {
         startEncoder = Robot.frontRight.getCurrentPosition();
         double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
         while (error > 1){
-            double s = 1;
+            double speed = error - distance;
             if (direction == "forward") {         setSpeeds(-speed, -speed, speed, speed, Robot);
             } else if (direction == "backward") { setSpeeds(speed, speed, -speed, -speed, Robot);
             } else if (direction == "left") {     setSpeeds(-speed, speed, speed, -speed, Robot);

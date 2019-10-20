@@ -111,21 +111,6 @@ public class HardwareDesignosaurs {
         }
     }
 
-    public void initVuforia(boolean showPreview, HardwareMap hardwareMap, LinearOpMode opMode) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(showPreview ? cameraMonitorViewId : null);
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection   = CAMERA_CHOICE;
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // load skystone data
-        VuforiaTrackables targetsSkyStone = opMode.vuforia.loadTrackablesFromAsset("Skystone");
-        VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
-        stoneTarget.setName("Stone Target");
-
-    }
-
     public void setSpeeds(Double FR, Double FL, Double BR, Double BL, HardwareDesignosaurs Robot){
         Robot.frontRight.setPower(FR);
         Robot.frontLeft.setPower(FL);
@@ -137,6 +122,7 @@ public class HardwareDesignosaurs {
         startEncoder = Robot.frontRight.getCurrentPosition();
         double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
         while (error > 1){
+            error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
             double speed = error - distance;
             if (direction == "forward") {         setSpeeds(-speed, -speed, speed, speed, Robot);
             } else if (direction == "backward") { setSpeeds(speed, speed, -speed, -speed, Robot);

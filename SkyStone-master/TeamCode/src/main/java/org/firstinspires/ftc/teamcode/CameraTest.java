@@ -123,12 +123,14 @@ public class CameraTest extends LinearOpMode {
             }
             telemetry.update();
 
-            VectorF translation = lastLocation.getTranslation();
-            speed = (translation.get(1) / mmPerInch) / -10;
-            Robot.frontRight.setPower(speed);
-            Robot.frontLeft.setPower(-speed);
-            Robot.backRight.setPower(-speed);
-            Robot.backLeft.setPower(speed);
+            if (targetVisible) {
+                VectorF translation = lastLocation.getTranslation();
+                speed = (translation.get(1) / mmPerInch) / -10;
+                Robot.frontRight.setPower(speed);
+                Robot.frontLeft.setPower(-speed);
+                Robot.backRight.setPower(-speed);
+                Robot.backLeft.setPower(speed);
+            }
         }
 
 

@@ -13,6 +13,8 @@ REV Hub 1 ( ):
         4 empty
         5 empty
 
+REV Hub 2 ( ):
+
 MR Motor Hub ( ):
     motors:
         0 lift1        ("lift_1")

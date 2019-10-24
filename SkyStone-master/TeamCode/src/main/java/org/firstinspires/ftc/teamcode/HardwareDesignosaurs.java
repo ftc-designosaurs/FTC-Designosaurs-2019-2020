@@ -19,6 +19,8 @@ public class HardwareDesignosaurs {
     public DcMotor frontLeft  = null;
     public DcMotor backRight  = null;
     public DcMotor backLeft   = null;
+    public DcMotor pitchMotor = null;
+    public DcMotor liftMotor  = null;
 
     // Define Servos
     public Servo gripper    = null;
@@ -57,7 +59,8 @@ public class HardwareDesignosaurs {
         frontLeft = hwMap.get(DcMotor.class,"front_left");
         backRight = hwMap.get(DcMotor.class,"back_right");
         backLeft = hwMap.get(DcMotor.class,"back_left");
-
+        pitchMotor = hwMap.get(DcMotor.class, "pitch_motor");
+        liftMotor = hwMap.get(DcMotor.class, "lift_motor");
 
         // Initialize Servos
         gripper = hwMap.get(Servo.class, "left_gripper");

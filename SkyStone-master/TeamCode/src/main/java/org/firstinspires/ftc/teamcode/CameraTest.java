@@ -121,7 +121,7 @@ public class CameraTest extends LinearOpMode {
             else {
                 telemetry.addData("Visible Target", "none");
             }
-            telemetry.update();
+
 
             if (targetVisible) {
                 VectorF translation = lastLocation.getTranslation();
@@ -131,6 +131,21 @@ public class CameraTest extends LinearOpMode {
                 Robot.backRight.setPower(-speed);
                 Robot.backLeft.setPower(speed);
             }
+
+            if (targetVisible) {
+                VectorF translation = lastLocation.getTranslation();
+                speed = (translation.get(1) / mmPerInch) / -10;
+                if (translation.get(1) < 0) {
+                    telemetry.addData("Target pos", "Left");
+
+                } else {
+                    telemetry.addData("Target pos", "Middle");
+                }
+            } else {
+                telemetry.addData("Target pos", "Right");
+            }
+
+            telemetry.update();
         }
 
 

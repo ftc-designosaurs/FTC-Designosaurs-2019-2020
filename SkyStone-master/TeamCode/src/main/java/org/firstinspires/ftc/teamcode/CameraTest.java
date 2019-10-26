@@ -30,7 +30,6 @@ public class CameraTest extends LinearOpMode {
     private static final String VUFORIA_KEY =
             "AdCuaEX/////AAABmXYJgRHZxkB9gj+81cIaX+JZm4W2w3Ee2HhKucJINnuXQ8l214BoCiyEk04zmQ/1VPvo+8PY7Um3eI5rI4WnSJmEXo7jyMz2WZDkkRnA88uBCtbml8CsMSIS7J3aUcgVd9P8ocLLgwqpavhEEaUixEx/16rgzIEtuHcq5ghQzzCkqR1xvAaxnx5lWM+ixf6hBCfZEnaiUM7WjD4gflO55IpoO/CdCWQrGUw2LuUKW2J+4K6ftKwJ+B1Qdy7pt2tDrGZvMyB4AcphPuoJRCSr5NgRoNWZ+WH5LqAdzYEO0Bv7C9LeSgmSPPT7GPPDpjv6+3DO5BE6l+2uMYQQbuF11BWKKq5Xp+D5Y6l2+W97zpgP";
 
-    WebcamName webcamName = null;
 
     private static final float mmPerInch        = 25.4f;
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -44,17 +43,15 @@ public class CameraTest extends LinearOpMode {
 
     public double speed;
 
-    HardwareDesignosaurs Robot = new HardwareDesignosaurs();
+
 
     @Override public void runOpMode() {
-        Robot.init(hardwareMap, 0, 0, 0); //initialize motors and sensors
 
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = webcamName;
+        parameters.cameraDirection = CAMERA_CHOICE;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
         VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
@@ -123,14 +120,6 @@ public class CameraTest extends LinearOpMode {
             }
 
 
-            if (targetVisible) {
-                VectorF translation = lastLocation.getTranslation();
-                speed = (translation.get(1) / mmPerInch) / -10;
-                Robot.frontRight.setPower(speed);
-                Robot.frontLeft.setPower(-speed);
-                Robot.backRight.setPower(-speed);
-                Robot.backLeft.setPower(speed);
-            }
 
             if (targetVisible) {
                 VectorF translation = lastLocation.getTranslation();

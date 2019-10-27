@@ -32,6 +32,7 @@ public class HardwareDesignosaurs {
     public double lastTime = 0;
     public double deltaTime = 0;
     public double speed = 0;
+    public double accelPerSec = .2;
 
     public int power = 3;
 
@@ -114,14 +115,14 @@ public class HardwareDesignosaurs {
         }
     }
 
-    public void setSpeeds(Double FR, Double FL, Double BR, Double BL, HardwareDesignosaurs Robot){
+    public void setSpeeds(double FR, double FL, double BR, double BL, HardwareDesignosaurs Robot){
         Robot.frontRight.setPower(FR);
         Robot.frontLeft.setPower(FL);
         Robot.backRight.setPower(BR);
         Robot.backLeft.setPower(BL);
     }
 
-    public void movePID(String direction, Double distance,HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time){
+    public void movePID(String direction, double distance,HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time){
         startEncoder = Robot.frontRight.getCurrentPosition();
         double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
         while (error > 1){
@@ -139,7 +140,7 @@ public class HardwareDesignosaurs {
 
     }
 
-    public void move(String direction, Double maxSpeed, Double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
+    public void move(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
         if (direction == "forward") {
             Robot.frontRight.setPower(-speed);
             Robot.frontLeft.setPower(-speed);
@@ -174,4 +175,62 @@ public class HardwareDesignosaurs {
         Robot.backRight.setPower(0);
         Robot.backLeft.setPower(0);
     }
+
+    public void setTargetPos (DcMotor motor, double position) {
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setTargetPosition( (int) Math.round(position));
+    }
+
+    public void setPowers (HardwareDesignosaurs Robot, double speed) {
+        Robot.frontRight.setPower(speed);
+        Robot.frontLeft.setPower(speed);
+        Robot.backRight.setPower(speed);
+        Robot.backLeft.setPower(speed);
+    }
+
+    public void moveRTP(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
+        double encDist = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+
+        setTargetPos(Robot.frontRight, encDist);
+        if (direction == "forward") {
+            setTargetPos(Robot.frontRight, -encDist);
+            setTargetPos(Robot.frontLeft, -encDist);
+            setTargetPos(Robot.backLeft, encDist);
+            setTargetPos(Robot.backRight, encDist);
+        } else if (direction == "backward") {
+            setTargetPos(Robot.frontRight, encDist);
+            setTargetPos(Robot.frontLeft, encDist);
+            setTargetPos(Robot.backLeft, -encDist);
+            setTargetPos(Robot.backRight, -encDist);
+        } else if (direction == "left") {
+            setTargetPos(Robot.frontRight, -encDist);
+            setTargetPos(Robot.frontLeft, encDist);
+            setTargetPos(Robot.backLeft, encDist);
+            setTargetPos(Robot.backRight, -encDist);
+        } else if (direction == "right") {
+            setTargetPos(Robot.frontRight, encDist);
+            setTargetPos(Robot.frontLeft, -encDist);
+            setTargetPos(Robot.backLeft, -encDist);
+            setTargetPos(Robot.backRight, encDist);
+        } else {
+            opMode.telemetry.addData("failure","invalid input");
+            opMode.telemetry.update();
+        }
+
+        time.reset();
+        double prevTime = time.time();
+        double nowTime;
+        double deltaTime;
+        double currentMaxSpeed = 0;
+        while (Robot.frontRight.isBusy() || Robot.frontLeft.isBusy() || Robot.backRight.isBusy() || Robot.backLeft.isBusy()) {
+            nowTime = time.time();
+            deltaTime = prevTime - nowTime;
+            prevTime = nowTime;
+            currentMaxSpeed += deltaTime * accelPerSec;
+            setPowers(Robot, currentMaxSpeed);
+        }
+        setPowers(Robot, 0);
+
+    }
 }
+

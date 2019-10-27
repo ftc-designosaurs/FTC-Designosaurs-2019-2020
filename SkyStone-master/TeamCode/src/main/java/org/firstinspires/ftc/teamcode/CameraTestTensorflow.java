@@ -79,7 +79,7 @@ public class CameraTestTensorflow extends LinearOpMode {
                                     recognition.getRight(), recognition.getBottom());
 
                             // mycode VVV
-                            speed = (recognition.getLeft() - 250) / 200;
+                            speed = (recognition.getLeft() - 250) / -200;
                             telemetry.addData("targetSpeed", speed);
                             Robot.frontRight.setPower(speed);
                             Robot.frontLeft.setPower(-speed);
@@ -94,9 +94,9 @@ public class CameraTestTensorflow extends LinearOpMode {
                             }
                         }
                         telemetry.update();
-                    } else {
+                    } /*else {
                         telemetry.addData("Target pos", "Right");
-                    }
+                    }*/
                 }
 
             }

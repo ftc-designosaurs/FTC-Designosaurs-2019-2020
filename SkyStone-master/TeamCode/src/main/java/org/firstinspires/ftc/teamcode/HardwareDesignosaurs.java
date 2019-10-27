@@ -226,7 +226,11 @@ public class HardwareDesignosaurs {
             nowTime = time.time();
             deltaTime = prevTime - nowTime;
             prevTime = nowTime;
-            currentMaxSpeed += deltaTime * accelPerSec;
+            if (currentMaxSpeed < maxSpeed) {
+                currentMaxSpeed += deltaTime * accelPerSec;
+            } else {
+                currentMaxSpeed = maxSpeed;
+            }
             setPowers(Robot, currentMaxSpeed);
         }
         setPowers(Robot, 0);

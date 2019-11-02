@@ -13,6 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.concurrent.TimeUnit;
+
 public class HardwareDesignosaurs {
 
     // Define Motors
@@ -190,7 +192,8 @@ public class HardwareDesignosaurs {
     }
 
     public void moveRTP(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
-        double encDist = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+        double encDist = distance / encoder_ticks_per_inch;
+        //double encDist = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
 
         Robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -199,41 +202,27 @@ public class HardwareDesignosaurs {
 
         setTargetPos(Robot.frontRight, encDist);
         if (direction == "forward") {
-            setTargetPos(Robot.frontRight, encDist);
-            setTargetPos(Robot.frontLeft, encDist);
-            setTargetPos(Robot.backLeft, encDist);
-            setTargetPos(Robot.backRight, encDist);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            backRight.setDirection(DcMotor.Direction.FORWARD);
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
-        } else if (direction == "backward") {
-            setTargetPos(Robot.frontRight, encDist);
-            setTargetPos(Robot.frontLeft, encDist);
-            setTargetPos(Robot.backLeft, encDist);
-            setTargetPos(Robot.backRight, encDist);
-            frontRight.setDirection(DcMotor.Direction.FORWARD);
-            frontLeft.setDirection(DcMotor.Direction.FORWARD);
-            backRight.setDirection(DcMotor.Direction.REVERSE);
-            backLeft.setDirection(DcMotor.Direction.REVERSE);
-        } else if (direction == "left") {
-            setTargetPos(Robot.frontRight, encDist);
-            setTargetPos(Robot.frontLeft, encDist);
-            setTargetPos(Robot.backLeft, encDist);
-            setTargetPos(Robot.backRight, encDist);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            frontLeft.setDirection(DcMotor.Direction.FORWARD);
-            backRight.setDirection(DcMotor.Direction.FORWARD);
-            backLeft.setDirection(DcMotor.Direction.REVERSE);
-        } else if (direction == "right") {
-            setTargetPos(Robot.frontRight, encDist);
             setTargetPos(Robot.frontLeft, -encDist);
+            setTargetPos(Robot.frontRight, -encDist);
+            setTargetPos(Robot.backLeft, encDist);
+            setTargetPos(Robot.backRight, encDist);
+
+        } else if (direction == "backward") {
+            setTargetPos(Robot.frontLeft, encDist);
+            setTargetPos(Robot.frontRight, encDist);
+            setTargetPos(Robot.backLeft, -encDist);
+            setTargetPos(Robot.backRight, -encDist);
+        } else if (direction == "left") {
+            setTargetPos(Robot.frontLeft, -encDist);
+            setTargetPos(Robot.frontRight, encDist);
+            setTargetPos(Robot.backLeft, encDist);
+            setTargetPos(Robot.backRight, -  encDist);
+
+        } else if (direction == "right") {
+            setTargetPos(Robot.frontLeft, encDist);
+            setTargetPos(Robot.frontRight, -encDist);
             setTargetPos(Robot.backLeft, -encDist);
             setTargetPos(Robot.backRight, encDist);
-            frontRight.setDirection(DcMotor.Direction.FORWARD);
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            backRight.setDirection(DcMotor.Direction.REVERSE);
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
         } else {
             opMode.telemetry.addData("failure","invalid input");
             opMode.telemetry.update();
@@ -258,6 +247,13 @@ public class HardwareDesignosaurs {
             opMode.telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
             opMode.telemetry.addData("br",Robot.backRight.getCurrentPosition());
             opMode.telemetry.addData("bl",Robot.backLeft.getCurrentPosition());
+            opMode.telemetry.addData("loop ps", 1/deltaTime);
+            opMode.telemetry.addData("current speed", currentMaxSpeed);
+            opMode.telemetry.update();
+        }
+        time.reset();
+        while (time.time(TimeUnit.MILLISECONDS) < 500) {
+            opMode.telemetry.addData("time until quit", 500 - time.time(TimeUnit.MILLISECONDS));
             opMode.telemetry.update();
         }
         setPowers(Robot, 0);

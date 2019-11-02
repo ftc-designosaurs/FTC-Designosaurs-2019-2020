@@ -20,6 +20,37 @@ public class BlueSkystoneAuto extends LinearOpMode{
         Robot.init(hardwareMap, 0, 0, 0);
 
         Robot.moveRTP("backward", .4, 10.0, Robot, this, runtime);
+        // first
+        if (pos == 0) {
+            Robot.moveRTP("right",.4,4.5 ,Robot ,this, runtime);
+        } else if (pos == 1) {
+            Robot.moveRTP("right",.4,12.5 ,Robot ,this, runtime);
+        } else if (pos == 2) {
+            Robot.moveRTP("right",.4,20.5 ,Robot ,this, runtime);
+        }
+        Robot.moveRTP("backward", .4, 22.0 ,Robot, this, runtime);
+        Robot.leftGripper.setPosition(1);
+        runtime.reset();
+        while (runtime.time(TimeUnit.MILLISECONDS) < 500) {
+            telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
+            telemetry.update();
+        }
+        Robot.moveRTP("forward", .4, 10.0 ,Robot, this, runtime);
+        if (pos == 0) {
+            Robot.moveRTP("right", .4, 36.0 ,Robot, this, runtime);
+        } else if (pos == 1) {
+            Robot.moveRTP("right", .4, 28.0 ,Robot, this, runtime);
+        } else if (pos == 2) {
+            Robot.moveRTP("right", .4, 20.0 ,Robot, this, runtime);
+        }
+
+        Robot.leftGripper.setPosition(0);
+        runtime.reset();
+        while (runtime.time(TimeUnit.MILLISECONDS) < 500) {
+            telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
+            telemetry.update();
+        }
+        //second
         Robot.moveRTP("left", .4, 30.0 ,Robot, this, runtime);
 
         if (pos == 0) {
@@ -38,7 +69,14 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.update();
         }
         Robot.moveRTP("forward", .4, 10.0 ,Robot, this, runtime);
-        Robot.moveRTP("right", .4, 60.0 ,Robot, this, runtime);
+        if (pos == 0) {
+            Robot.moveRTP("right", .4, 60.0 ,Robot, this, runtime);
+        } else if (pos == 1) {
+            Robot.moveRTP("right", .4, 52.0 ,Robot, this, runtime);
+        } else if (pos == 2) {
+            Robot.moveRTP("right", .4, 44.0 ,Robot, this, runtime);
+        }
+
         Robot.leftGripper.setPosition(0);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500) {

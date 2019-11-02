@@ -102,7 +102,7 @@ public class HardwareDesignosaurs {
         mainGripper.setPosition(0);
         foundationGripper.setPosition(0);
         leftGripper.setPosition(0);
-        rightGripper.setPosition(0);
+        rightGripper.setPosition(1);
 
     }
 

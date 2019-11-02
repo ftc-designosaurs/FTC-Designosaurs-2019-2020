@@ -26,7 +26,10 @@ public class HardwareDesignosaurs {
     public DcMotor liftMotor  = null;
 
     // Define Servos
-    public Servo gripper    = null;
+    public Servo mainGripper        = null;
+    public Servo foundationGripper  = null;
+    public Servo leftGripper        = null;
+    public Servo rightGripper       = null;
 
     // Define Sensors
 
@@ -68,7 +71,11 @@ public class HardwareDesignosaurs {
         liftMotor = hwMap.get(DcMotor.class, "lift_motor");
 
         // Initialize Servos
-        gripper = hwMap.get(Servo.class, "left_gripper");
+        mainGripper = hwMap.get(Servo.class, "main_manipulator");
+        foundationGripper = hwMap.get(Servo.class, "foundation_manipulator");
+        leftGripper = hwMap.get(Servo.class, "left_auto_manipulator");
+        rightGripper = hwMap.get(Servo.class, "right_auto_manipulator");
+
 
         // Initialize Sensors
 
@@ -92,7 +99,10 @@ public class HardwareDesignosaurs {
 
         // Set Servo Positions
 
-        gripper.setPosition(0);
+        mainGripper.setPosition(0);
+        foundationGripper.setPosition(0);
+        leftGripper.setPosition(0);
+        rightGripper.setPosition(0);
 
     }
 

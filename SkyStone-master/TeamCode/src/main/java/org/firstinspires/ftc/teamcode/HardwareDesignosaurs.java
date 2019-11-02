@@ -125,9 +125,9 @@ public class HardwareDesignosaurs {
 
     public void movePID(String direction, double distance,HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time){
         startEncoder = Robot.frontRight.getCurrentPosition();
-        double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+        double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) / encoder_ticks_per_inch;
         while (error > 1){
-            error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+            error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) / encoder_ticks_per_inch;
             double speed = error - distance;
             if (direction == "forward") {         setSpeeds(-speed, -speed, speed, speed, Robot);
             } else if (direction == "backward") { setSpeeds(speed, speed, -speed, -speed, Robot);

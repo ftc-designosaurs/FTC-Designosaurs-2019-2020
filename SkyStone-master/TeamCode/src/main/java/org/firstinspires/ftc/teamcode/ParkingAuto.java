@@ -16,7 +16,7 @@ public class ParkingAuto extends LinearOpMode{
         Robot.init(hardwareMap, 0, 0, 0);
 
         //Robot.moveRTP("forward", .4,Robot.encoder_ticks_per_revolution* Robot.encoder_ticks_per_inch,Robot,this,runtime);
-        Robot.moveRTP("forward", .4, 6.0 ,Robot, this, runtime);
+        Robot.moveRTP("left", .4, 6.0 ,Robot, this, runtime);
         /*Robot.moveRTP("backward", .4, 6.0 ,Robot, this, runtime);
         Robot.moveRTP("left", .4, 6.0 ,Robot, this, runtime);
         Robot.moveRTP("right", .4, 6.0 ,Robot, this, runtime);  //*/

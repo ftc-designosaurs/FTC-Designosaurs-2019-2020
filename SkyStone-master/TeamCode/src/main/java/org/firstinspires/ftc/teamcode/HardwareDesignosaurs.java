@@ -36,6 +36,7 @@ public class HardwareDesignosaurs {
     public double deltaTime = 0;
     public double speed = 0;
     public double accelPerSec = .2;
+    public double sideBias = Math.sqrt(2);
 
     public int power = 3;
 
@@ -213,16 +214,16 @@ public class HardwareDesignosaurs {
             setTargetPos(Robot.backLeft, -encDist);
             setTargetPos(Robot.backRight, -encDist);
         } else if (direction == "left") {
-            setTargetPos(Robot.frontLeft, -encDist);
-            setTargetPos(Robot.frontRight, encDist);
-            setTargetPos(Robot.backLeft, encDist);
-            setTargetPos(Robot.backRight, -  encDist);
+            setTargetPos(Robot.frontLeft, -encDist * sideBias);
+            setTargetPos(Robot.frontRight, encDist * sideBias);
+            setTargetPos(Robot.backLeft, encDist * sideBias);
+            setTargetPos(Robot.backRight, -  encDist * sideBias);
 
         } else if (direction == "right") {
-            setTargetPos(Robot.frontLeft, encDist);
-            setTargetPos(Robot.frontRight, -encDist);
-            setTargetPos(Robot.backLeft, -encDist);
-            setTargetPos(Robot.backRight, encDist);
+            setTargetPos(Robot.frontLeft, encDist * sideBias);
+            setTargetPos(Robot.frontRight, -encDist * sideBias);
+            setTargetPos(Robot.backLeft, -encDist * sideBias);
+            setTargetPos(Robot.backRight, encDist * sideBias);
         } else {
             opMode.telemetry.addData("failure","invalid input");
             opMode.telemetry.update();

@@ -18,7 +18,7 @@ public class BlueFoundationMove extends LinearOpMode{
         runtime.reset();
         Robot.init(hardwareMap, 0, 0, 0);
 
-        Robot.moveRTP("backward", .4, 12.0 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .4, 24.0 ,Robot, this, runtime);
         Robot.moveRTP("right", .4, 12.0 ,Robot, this, runtime);
         Robot.moveRTP("backward", .4, 10.0 ,Robot, this, runtime);
         Robot.foundationGripper.setPosition(1);
@@ -27,7 +27,7 @@ public class BlueFoundationMove extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", .4, 20.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", .4, 34.0 ,Robot, this, runtime);
         Robot.foundationGripper.setPosition(0);
         startTime = runtime.time(TimeUnit.MILLISECONDS);
         while (Math.abs(runtime.time(TimeUnit.MILLISECONDS) - startTime) < 500) {
@@ -35,12 +35,12 @@ public class BlueFoundationMove extends LinearOpMode{
             telemetry.update();
         }
         Robot.moveRTP("forward", .4, 1.0 ,Robot, this, runtime);
-        Robot.moveRTP("left", .4, 24 ,Robot, this, runtime);
+        Robot.moveRTP("left", .4, 12 ,Robot, this, runtime);
 
         while (runtime.time(TimeUnit.SECONDS) < 26) {
-            Robot.moveRTP("left", .4, 12 ,Robot, this, runtime);
+            telemetry.addData("time left:", 30- runtime.time(TimeUnit.SECONDS));
         }
-
+        Robot.moveRTP("left", .4, 24 ,Robot, this, runtime);
     }
 
 }

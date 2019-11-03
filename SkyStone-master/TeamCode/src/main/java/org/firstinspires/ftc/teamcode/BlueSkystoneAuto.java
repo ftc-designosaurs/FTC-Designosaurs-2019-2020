@@ -50,6 +50,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
+        Robot.moveRTP("left", .4, 40.5,Robot,this,runtime);
         //second
         Robot.moveRTP("left", .4, 30.0 ,Robot, this, runtime);
 

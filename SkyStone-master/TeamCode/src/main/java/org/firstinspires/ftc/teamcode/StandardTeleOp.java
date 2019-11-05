@@ -54,6 +54,10 @@ public class StandardTeleOp extends OpMode {
         Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
         Robot.liftMotor.setPower(gamepad2.right_stick_y);
 
+        telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
+        telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
+        telemetry.update();
+
         if (gamepad2.a) {
             Robot.rightGripper.setPosition(0);
         } else if (gamepad2.y) {

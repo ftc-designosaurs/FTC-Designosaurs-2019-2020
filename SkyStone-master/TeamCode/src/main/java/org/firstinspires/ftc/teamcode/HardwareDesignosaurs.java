@@ -244,7 +244,7 @@ public class HardwareDesignosaurs {
         double nowTime;
         double deltaTime;
         double currentMaxSpeed = 0;
-        while (Robot.frontRight.isBusy() || Robot.frontLeft.isBusy() || Robot.backRight.isBusy() || Robot.backLeft.isBusy()) {
+        while ((Robot.frontRight.isBusy() || Robot.frontLeft.isBusy() || Robot.backRight.isBusy() || Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
             nowTime = time.time();
             deltaTime = prevTime - nowTime;
             prevTime = nowTime;
@@ -263,7 +263,7 @@ public class HardwareDesignosaurs {
             opMode.telemetry.update();
         }
         time.reset();
-        while (time.time(TimeUnit.MILLISECONDS) < 500) {
+        while (time.time(TimeUnit.MILLISECONDS) < 500 && opMode.opModeIsActive()) {
             opMode.telemetry.addData("time until quit", 500 - time.time(TimeUnit.MILLISECONDS));
             opMode.telemetry.update();
         }

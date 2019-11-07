@@ -164,13 +164,14 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 2) {
             Robot.moveRTP("right", .4, 48.0 ,Robot, this, runtime);
         }
-
+        Robot.moveRTP("backward", .4, 4 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(0);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
+        Robot.moveRTP("left", .4, 10 ,Robot, this, runtime);
 
     }
     private void initVuforia() {

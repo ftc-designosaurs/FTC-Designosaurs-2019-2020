@@ -39,6 +39,8 @@ public class HardwareDesignosaurs {
     public double deltaTime = 0;
     public double speed = 0;
     public double accelPerSec = .2;
+    public double decelPGain = encoder_ticks_per_inch * 15;
+    public double minSpeed = .2;
     public double sideBias = Math.sqrt(2);
 
     public int power = 3;
@@ -243,23 +245,29 @@ public class HardwareDesignosaurs {
         double prevTime = time.time();
         double nowTime;
         double deltaTime;
-        double currentMaxSpeed = 0;
+        double rampUpSpeed = 0;
+        double rampDownSpeed = 0;
+        double currentSpeed = 0;
         while ((Robot.frontRight.isBusy() && Robot.frontLeft.isBusy() && Robot.backRight.isBusy() && Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
             nowTime = time.time();
             deltaTime = prevTime - nowTime;
             prevTime = nowTime;
-            if (currentMaxSpeed < maxSpeed) {
-                currentMaxSpeed += deltaTime * accelPerSec;
+            if (rampUpSpeed < maxSpeed) {
+                rampUpSpeed += deltaTime * accelPerSec;
             } else {
-                currentMaxSpeed = maxSpeed;
+                rampUpSpeed = maxSpeed;
             }
-            setPowers(Robot, currentMaxSpeed);
+            rampDownSpeed = Math.max(Math.abs(Robot.frontRight.getCurrentPosition() - encDist) * decelPGain, minSpeed);
+
+            currentSpeed = Math.min(rampUpSpeed,rampDownSpeed);
+            setPowers(Robot, currentSpeed);
             opMode.telemetry.addData("fr",Robot.frontRight.getCurrentPosition());
             opMode.telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
             opMode.telemetry.addData("br",Robot.backRight.getCurrentPosition());
             opMode.telemetry.addData("bl",Robot.backLeft.getCurrentPosition());
             opMode.telemetry.addData("loop ps", 1/deltaTime);
-            opMode.telemetry.addData("current speed", currentMaxSpeed);
+            opMode.telemetry.addData("ramp up speed", rampUpSpeed);
+            opMode.telemetry.addData("ramp down speed", rampDownSpeed);
             opMode.telemetry.update();
         }
         time.reset();

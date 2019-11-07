@@ -244,7 +244,7 @@ public class HardwareDesignosaurs {
         double nowTime;
         double deltaTime;
         double currentMaxSpeed = 0;
-        while ((Robot.frontRight.isBusy() || Robot.frontLeft.isBusy() || Robot.backRight.isBusy() || Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
+        while ((Robot.frontRight.isBusy() && Robot.frontLeft.isBusy() && Robot.backRight.isBusy() && Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
             nowTime = time.time();
             deltaTime = prevTime - nowTime;
             prevTime = nowTime;

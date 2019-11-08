@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="Mecanum Drive", group="TeleOp")
 public class StandardTeleOp extends OpMode {
 
+    // variables
+    boolean isLowGear = false;
+
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();
 
     @Override
@@ -21,9 +24,16 @@ public class StandardTeleOp extends OpMode {
         double lh, lv, rh;     // Joystick variables
 
         // set joystick variables
-        lh = gamepad1.left_stick_x;
-        lv = -gamepad1.left_stick_y;
-        rh = gamepad1.right_stick_x;
+        if (isLowGear) {
+            lh = gamepad1.left_stick_x;
+            lv = -gamepad1.left_stick_y;
+            rh = gamepad1.right_stick_x;
+        } else {
+            lh = gamepad1.left_stick_x;
+            lv = -gamepad1.left_stick_y;
+            rh = gamepad1.right_stick_x;
+        }
+
 
         // square for exponential drive
         lh = Robot.square(lh, Robot.power)/2;

@@ -38,8 +38,8 @@ public class HardwareDesignosaurs {
     public double lastTime = 0;
     public double deltaTime = 0;
     public double speed = 0;
-    public double accelPerSec = .2;
-    public double decelPGain = encoder_ticks_per_inch * 15;
+    public double accelPerSec = .8;
+    public double decelPGain = encoder_ticks_per_inch / 45;
     public double minSpeed = .2;
     public double sideBias = Math.sqrt(2);
 
@@ -248,16 +248,22 @@ public class HardwareDesignosaurs {
         double rampUpSpeed = 0;
         double rampDownSpeed = 0;
         double currentSpeed = 0;
+        boolean rampDownLock = false;
         while ((Robot.frontRight.isBusy() && Robot.frontLeft.isBusy() && Robot.backRight.isBusy() && Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
             nowTime = time.time();
-            deltaTime = prevTime - nowTime;
+            deltaTime = nowTime - prevTime;
             prevTime = nowTime;
             if (rampUpSpeed < maxSpeed) {
                 rampUpSpeed += deltaTime * accelPerSec;
             } else {
                 rampUpSpeed = maxSpeed;
             }
-            rampDownSpeed = Math.max(Math.abs(Robot.frontRight.getCurrentPosition() - encDist) * decelPGain, minSpeed);
+            rampDownSpeed = Math.max(Math.abs(Math.abs(Robot.frontRight.getCurrentPosition()*encoder_ticks_per_inch) - distance) * 1/10, minSpeed);
+            if (rampDownLock) {
+                rampDownSpeed = minSpeed;
+            } else if (minSpeed == rampDownSpeed) {
+                rampDownLock = true;
+            }
 
             currentSpeed = Math.min(rampUpSpeed,rampDownSpeed);
             setPowers(Robot, currentSpeed);
@@ -268,6 +274,7 @@ public class HardwareDesignosaurs {
             opMode.telemetry.addData("loop ps", 1/deltaTime);
             opMode.telemetry.addData("ramp up speed", rampUpSpeed);
             opMode.telemetry.addData("ramp down speed", rampDownSpeed);
+            opMode.telemetry.addData("target speed", currentSpeed);
             opMode.telemetry.update();
         }
         time.reset();

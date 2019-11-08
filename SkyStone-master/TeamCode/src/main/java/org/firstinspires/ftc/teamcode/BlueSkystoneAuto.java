@@ -105,14 +105,14 @@ public class BlueSkystoneAuto extends LinearOpMode{
         }
         Robot.init(hardwareMap, 0, 0, 0);
 
-        Robot.moveRTP("backward", .4, 10.0, Robot, this, runtime);
+        Robot.moveRTP("backward", 1, 10.0, Robot, this, runtime);
         // first
         if (pos == 0) {
-            Robot.moveRTP("left",.4,3.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,3.5 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right",.4,2.5 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,2.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right",.4,9.5 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,9.5 ,Robot ,this, runtime);
         }
         Robot.moveRTP("backward", .4, 20.0 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
@@ -121,13 +121,13 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", .4, 12.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", 1, 12.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("right", .4, 43.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 43.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right", .4, 35.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 35.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", .4, 27.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 27.0 ,Robot, this, runtime);
         }
 
         Robot.leftGripper.setPosition(0);
@@ -136,42 +136,42 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("left", .4, 40.5,Robot,this,runtime);
+        Robot.moveRTP("left", 1, 40.5,Robot,this,runtime);
         //second
 
-        Robot.moveRTP("left", .4, 30.0 ,Robot, this, runtime);
+        Robot.moveRTP("left", .3, 25.0 ,Robot, this, runtime);
 
         if (pos == 0) {
-            Robot.moveRTP("right",.4,1 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,1 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right",.4,7 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,7 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right",.4,13 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,13 ,Robot ,this, runtime);
         }
 
-        Robot.moveRTP("backward", .4, 10 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .2, 15 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", .4, 12.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", 1, 12.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("right", .4, 60.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 60.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right", .4, 54.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 54.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", .4, 48.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 48.0 ,Robot, this, runtime);
         }
-        Robot.moveRTP("backward", .4, 4 ,Robot, this, runtime);
+        Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(0);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("left", .4, 10 ,Robot, this, runtime);
+        Robot.moveRTP("left", 1, 10 ,Robot, this, runtime);
 
     }
     private void initVuforia() {

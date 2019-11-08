@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Parking mission", group="Mechanum")
+@Autonomous(name="Parking mission", group="test")
 public class ParkingAuto extends LinearOpMode{
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();

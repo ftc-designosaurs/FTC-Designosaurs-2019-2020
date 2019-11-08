@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="Blue Skystone", group="Mechanum")
-public class BlueSkystoneAuto extends LinearOpMode{
+@Autonomous(name="Red Skystone", group="Mechanum")
+public class RedSkystoneAuto extends LinearOpMode{
 
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -104,11 +104,11 @@ public class BlueSkystoneAuto extends LinearOpMode{
         Robot.moveRTP("backward", 1, 10.0, Robot, this, runtime);
         // first
         if (pos == 0) {
-            Robot.moveRTP("left",1,3.5 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,3.5 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right",1,2.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,2.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right",1,10.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,10.5 ,Robot ,this, runtime);
         }
         Robot.moveRTP("backward", .4, 18.0 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
@@ -119,11 +119,11 @@ public class BlueSkystoneAuto extends LinearOpMode{
         }
         Robot.moveRTP("forward", 1, 9.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("right", .5, 43.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 43.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right", .5, 37.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 37.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", .5, 32.5 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 32.5 ,Robot, this, runtime);
         }
 
         Robot.leftGripper.setPosition(0);
@@ -132,17 +132,17 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        //Robot.moveRTP("left", 1, 67 ,Robot,this,runtime);
+        //Robot.moveRTP("right", 1, 67 ,Robot,this,runtime);
         //second
 
-        //Robot.moveRTP("left", .3, 25.0 ,Robot, this, runtime);
+        //Robot.moveRTP("right", .3, 25.0 ,Robot, this, runtime);
 
         if (pos == 0) {
-            Robot.moveRTP("left",1,62 - 1 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,62 - 1 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",1,62- 7 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,62- 7 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left",1,62 - 12 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,62 - 12 ,Robot ,this, runtime);
         }
 
         Robot.moveRTP("backward", .2, 9 ,Robot, this, runtime);
@@ -154,11 +154,11 @@ public class BlueSkystoneAuto extends LinearOpMode{
         }
         Robot.moveRTP("forward", 1, 8.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("right", .5, 60.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 60.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right", .5, 54.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 54.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", .5, 48.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 48.0 ,Robot, this, runtime);
         }
         Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(0);
@@ -167,7 +167,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("left", 1, 10 ,Robot, this, runtime);
+        Robot.moveRTP("right", 1, 10 ,Robot, this, runtime);
 
     }
     private void initVuforia() {

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="RTP Test no function", group="Mechanum")
+@Autonomous(name="RTP Test no function", group="test")
 public class MoveTest extends LinearOpMode {
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();

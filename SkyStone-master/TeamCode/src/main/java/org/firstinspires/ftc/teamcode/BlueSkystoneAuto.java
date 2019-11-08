@@ -112,7 +112,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 1) {
             Robot.moveRTP("right",1,2.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right",1,9.5 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,10.5 ,Robot ,this, runtime);
         }
         Robot.moveRTP("backward", .4, 18.0 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
@@ -127,7 +127,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 1) {
             Robot.moveRTP("right", .5, 37.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", .5, 24.5 ,Robot, this, runtime);
+            Robot.moveRTP("right", .5, 32.5 ,Robot, this, runtime);
         }
 
         Robot.leftGripper.setPosition(0);
@@ -146,17 +146,17 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 1) {
             Robot.moveRTP("left",1,62- 7 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left",1,62 - 13 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,62 - 12 ,Robot ,this, runtime);
         }
 
-        Robot.moveRTP("backward", .2, 12 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .2, 9 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", 1, 12.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", 1, 8.0 ,Robot, this, runtime);
         if (pos == 0) {
             Robot.moveRTP("right", .5, 60.0 ,Robot, this, runtime);
         } else if (pos == 1) {

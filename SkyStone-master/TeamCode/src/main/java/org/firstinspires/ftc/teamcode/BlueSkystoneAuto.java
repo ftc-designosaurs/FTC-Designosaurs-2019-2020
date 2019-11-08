@@ -125,9 +125,9 @@ public class BlueSkystoneAuto extends LinearOpMode{
         if (pos == 0) {
             Robot.moveRTP("right", 1, 43.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right", 1, 35.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 37.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right", 1, 27.0 ,Robot, this, runtime);
+            Robot.moveRTP("right", 1, 24.5 ,Robot, this, runtime);
         }
 
         Robot.leftGripper.setPosition(0);
@@ -136,10 +136,10 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("left", 1, 40.5,Robot,this,runtime);
+        Robot.moveRTP("left", 1, 67,Robot,this,runtime);
         //second
 
-        Robot.moveRTP("left", .3, 25.0 ,Robot, this, runtime);
+        //Robot.moveRTP("left", .3, 25.0 ,Robot, this, runtime);
 
         if (pos == 0) {
             Robot.moveRTP("right",1,1 ,Robot ,this, runtime);

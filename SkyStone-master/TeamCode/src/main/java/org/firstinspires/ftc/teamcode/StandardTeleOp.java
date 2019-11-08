@@ -25,9 +25,9 @@ public class StandardTeleOp extends OpMode {
 
         // set joystick variables
         if (isLowGear) {
-            lh = gamepad1.left_stick_x;
-            lv = -gamepad1.left_stick_y;
-            rh = gamepad1.right_stick_x;
+            lh = gamepad1.left_stick_x/3;
+            lv = -gamepad1.left_stick_y/3;
+            rh = gamepad1.right_stick_x/3;
         } else {
             lh = gamepad1.left_stick_x;
             lv = -gamepad1.left_stick_y;
@@ -84,6 +84,11 @@ public class StandardTeleOp extends OpMode {
             Robot.foundationGripper.setPosition(0.5);
         } else if (gamepad2.b) {
             Robot.foundationGripper.setPosition(1);
+        }
+        if (gamepad1.left_bumper) {
+            isLowGear = true;
+        } else if (gamepad1.right_bumper) {
+            isLowGear = false;
         }
 
     }

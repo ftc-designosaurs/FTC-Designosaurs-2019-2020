@@ -114,14 +114,14 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 2) {
             Robot.moveRTP("right",1,9.5 ,Robot ,this, runtime);
         }
-        Robot.moveRTP("backward", .4, 20.0 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .4, 17.0 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", 1, 12.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", 1, 9.0 ,Robot, this, runtime);
         if (pos == 0) {
             Robot.moveRTP("right", 1, 43.0 ,Robot, this, runtime);
         } else if (pos == 1) {

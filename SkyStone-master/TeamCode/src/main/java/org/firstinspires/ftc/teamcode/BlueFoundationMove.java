@@ -15,32 +15,33 @@ public class BlueFoundationMove extends LinearOpMode{
     @Override
     public void runOpMode() {
         waitForStart();
-        runtime.reset();
+        double matchStartTime = runtime.now(TimeUnit.SECONDS);
         Robot.init(hardwareMap, 0, 0, 0);
 
         Robot.moveRTP("backward", .4, 24.0 ,Robot, this, runtime);
         Robot.moveRTP("right", .4, 12.0 ,Robot, this, runtime);
-        Robot.moveRTP("backward", .4, 10.0 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .15, 10.0 ,Robot, this, runtime);
         Robot.foundationGripper.setPosition(1);
         long startTime = runtime.time(TimeUnit.MILLISECONDS);
-        while (Math.abs(runtime.time(TimeUnit.MILLISECONDS) - startTime) < 500) {
+        while (Math.abs(runtime.time(TimeUnit.MILLISECONDS) - startTime) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
         Robot.moveRTP("forward", .4, 34.0 ,Robot, this, runtime);
         Robot.foundationGripper.setPosition(0);
         startTime = runtime.time(TimeUnit.MILLISECONDS);
-        while (Math.abs(runtime.time(TimeUnit.MILLISECONDS) - startTime) < 500) {
+        while (Math.abs(runtime.time(TimeUnit.MILLISECONDS) - startTime) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
         //Robot.moveRTP("forward", .4, 1.0 ,Robot, this, runtime);
-        Robot.moveRTP("left", .4, 12 ,Robot, this, runtime);
+        //Robot.moveRTP("left", .4, 12 ,Robot, this, runtime);
 
-        while (runtime.time(TimeUnit.SECONDS) < 26) {
+        while (runtime.now(TimeUnit.SECONDS)-matchStartTime < 26 && opModeIsActive()) {
             telemetry.addData("time left:", 30- runtime.time(TimeUnit.SECONDS));
+            telemetry.update();
         }
-        Robot.moveRTP("left", .4, 24 ,Robot, this, runtime);
+        Robot.moveRTP("left", .4, 36 ,Robot, this, runtime);
     }
 
 }

@@ -8,6 +8,8 @@ public class StandardTeleOp extends OpMode {
 
     // variables
     boolean isLowGear = false;
+    double pitchPos = 0;
+    double liftPos = 0;
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();
 
@@ -68,21 +70,21 @@ public class StandardTeleOp extends OpMode {
         telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
         telemetry.update();
 
-        if (gamepad2.a) {
+        if (gamepad2.a && gamepad2.dpad_left) {
             Robot.rightGripper.setPosition(0);
-        } else if (gamepad2.y) {
+        } else if (gamepad2.y && gamepad2.dpad_left) {
             Robot.rightGripper.setPosition(1);
         }
 
-        if (gamepad2.dpad_up) {
+        if (gamepad2.dpad_up && gamepad2.dpad_left) {
             Robot.leftGripper.setPosition(0);
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad2.dpad_down && gamepad2.dpad_left) {
             Robot.leftGripper.setPosition(1);
         }
 
-        if (gamepad2.x) {
+        if (gamepad2.x && gamepad2.dpad_left) {
             Robot.foundationGripper.setPosition(0.5);
-        } else if (gamepad2.b) {
+        } else if (gamepad2.b && gamepad2.dpad_left) {
             Robot.foundationGripper.setPosition(1);
         }
         if (gamepad1.left_bumper) {
@@ -90,6 +92,8 @@ public class StandardTeleOp extends OpMode {
         } else if (gamepad1.right_bumper) {
             isLowGear = false;
         }
+
+        
 
     }
 

@@ -131,73 +131,14 @@ public class HardwareDesignosaurs {
         }
     }
 
-    public void setSpeeds(double FR, double FL, double BR, double BL, HardwareDesignosaurs Robot){
-        Robot.frontRight.setPower(FR);
-        Robot.frontLeft.setPower(FL);
-        Robot.backRight.setPower(BR);
-        Robot.backLeft.setPower(BL);
-    }
-
-    public void movePID(String direction, double distance,HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time){
-        startEncoder = Robot.frontRight.getCurrentPosition();
-        double error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) / encoder_ticks_per_inch;
-        while (error > 1){
-            error = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) / encoder_ticks_per_inch;
-            double speed = error - distance;
-            if (direction == "forward") {         setSpeeds(-speed, -speed, speed, speed, Robot);
-            } else if (direction == "backward") { setSpeeds(speed, speed, -speed, -speed, Robot);
-            } else if (direction == "left") {     setSpeeds(-speed, speed, speed, -speed, Robot);
-            } else if (direction == "right") {    setSpeeds(speed, -speed, -speed, speed, Robot);
-            } else {  opMode.telemetry.addData("invalid","input");
-            }
-        }
-        deltaTime = time.nanoseconds()-lastTime;
-        lastTime = time.nanoseconds();
-
-    }
-
-    public void move(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode) {
-        if (direction == "forward") {
-            Robot.frontRight.setPower(-speed);
-            Robot.frontLeft.setPower(-speed);
-            Robot.backRight.setPower(speed);
-            Robot.backLeft.setPower(speed);
-        } else if (direction == "backward") {
-            Robot.frontRight.setPower(speed);
-            Robot.frontLeft.setPower(speed);
-            Robot.backRight.setPower(-speed);
-            Robot.backLeft.setPower(-speed);
-        } else if (direction == "left") {
-            Robot.frontRight.setPower(-speed);
-            Robot.frontLeft.setPower(speed);
-            Robot.backRight.setPower(speed);
-            Robot.backLeft.setPower(-speed);
-        } else if (direction == "right") {
-            Robot.frontRight.setPower(speed);
-            Robot.frontLeft.setPower(-speed);
-            Robot.backRight.setPower(-speed);
-            Robot.backLeft.setPower(speed);
-        } else {
-            opMode.telemetry.addData("failure","invalid input");
-            opMode.telemetry.update();
-        }
-        while (opMode.opModeIsActive() & Math.abs((Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch) < distance) {
-            opMode.telemetry.addData("inches moved",(Robot.frontRight.getCurrentPosition() - startEncoder) * encoder_ticks_per_inch);
-            opMode.telemetry.addData("goal",distance);
-            opMode.telemetry.update();
-        }
-        Robot.frontRight.setPower(0);
-        Robot.frontLeft.setPower(0);
-        Robot.backRight.setPower(0);
-        Robot.backLeft.setPower(0);
-    }
-
     public void setTargetPos (DcMotor motor, double position) {
+        // this function sets the specified motor to go to the specified position
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setTargetPosition( (int) Math.round(position));
     }
 
     public void setPowers (HardwareDesignosaurs Robot, double speed) {
+        // this function sets all four drive motors to the specified power
         Robot.frontRight.setPower(speed);
         Robot.frontLeft.setPower(speed);
         Robot.backRight.setPower(speed);
@@ -205,14 +146,15 @@ public class HardwareDesignosaurs {
     }
 
     public void moveRTP(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
-        double encDist = distance / encoder_ticks_per_inch;
-        //double encDist = Math.abs(startEncoder - Robot.frontRight.getCurrentPosition()) * encoder_ticks_per_inch;
+        // this function moves the specified number of inches in the given direction using acceleration ramps along with the built-in PIDs
+        double encDist = distance / encoder_ticks_per_inch; // calculate distance in encoder counts
 
-        Robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // reset all encoders
         Robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        //set target positions based on direction
         setTargetPos(Robot.frontRight, encDist);
         if (direction == "forward") {
             setTargetPos(Robot.frontLeft, -encDist);
@@ -241,6 +183,7 @@ public class HardwareDesignosaurs {
             opMode.telemetry.update();
         }
 
+        // delta time setup
         time.reset();
         double prevTime = time.time();
         double nowTime;
@@ -249,7 +192,9 @@ public class HardwareDesignosaurs {
         double rampDownSpeed = 0;
         double currentSpeed = 0;
         boolean rampDownLock = false;
+        //loop until any of the motors are in position
         while ((Robot.frontRight.isBusy() && Robot.frontLeft.isBusy() && Robot.backRight.isBusy() && Robot.backLeft.isBusy()) && opMode.opModeIsActive()) {
+            // calculate rampup, delta time * accel var
             nowTime = time.time();
             deltaTime = nowTime - prevTime;
             prevTime = nowTime;
@@ -258,15 +203,20 @@ public class HardwareDesignosaurs {
             } else {
                 rampUpSpeed = maxSpeed;
             }
+            // calculate rampdown, remaining distance / 10, no less than min var
             rampDownSpeed = Math.max(Math.abs(Math.abs(Robot.frontRight.getCurrentPosition()*encoder_ticks_per_inch) - distance) * 1/10, minSpeed);
+            // lock ramp down at min var
             if (rampDownLock) {
                 rampDownSpeed = minSpeed;
             } else if (minSpeed == rampDownSpeed) {
                 rampDownLock = true;
             }
 
+            //set powers to whatever is lower, rampup or rampdown
             currentSpeed = Math.min(rampUpSpeed,rampDownSpeed);
             setPowers(Robot, currentSpeed);
+
+            //display debug info
             opMode.telemetry.addData("fr",Robot.frontRight.getCurrentPosition());
             opMode.telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
             opMode.telemetry.addData("br",Robot.backRight.getCurrentPosition());
@@ -277,11 +227,13 @@ public class HardwareDesignosaurs {
             opMode.telemetry.addData("target speed", currentSpeed);
             opMode.telemetry.update();
         }
+        // wait for 500ms so PIDs can settle
         time.reset();
         while (time.time(TimeUnit.MILLISECONDS) < 500 && opMode.opModeIsActive()) {
             opMode.telemetry.addData("time until quit", 500 - time.time(TimeUnit.MILLISECONDS));
             opMode.telemetry.update();
         }
+        //stop robot
         setPowers(Robot, 0);
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);

@@ -2,28 +2,50 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="Mecanum Drive", group="TeleOp")
 public class StandardTeleOp extends OpMode {
 
     // variables
     boolean isLowGear = false;
-    double pitchPos = 0;
-    double liftPos = 0;
+    int pitchPos = 0;
+    static int pitchPosOne = 0;
+    static int pitchPosTwo = 100;
+
+    int liftPos = 0;
+    static int liftPosOne = 0;
+    static int liftPosTwo = 100;
+    static int liftPosThree = 200;
+    static int liftPosFour = 300;
+
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();
+    private ElapsedTime runtime = new ElapsedTime();
+
+    double lastTime = runtime.now(TimeUnit.MILLISECONDS);
+    double deltaTime = 0;
 
     @Override
     public void init() {
         Robot.init(hardwareMap, 0, 0, 0); //initialize motors and sensors
 
         telemetry.addData("status: ", "Ready!");
+        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Robot.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
     public void loop() {
         double fr, fl, bl, br; // Motor variables
         double lh, lv, rh;     // Joystick variables
+
+        // calculate delta time
+        deltaTime = runtime.now(TimeUnit.MILLISECONDS) - lastTime;
+        lastTime = runtime.now(TimeUnit.MILLISECONDS);
 
         // set joystick variables
         if (isLowGear) {
@@ -63,13 +85,14 @@ public class StandardTeleOp extends OpMode {
             Robot.mainGripper.setPosition(.5);
         }
 
-        Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
-        Robot.liftMotor.setPower(gamepad2.right_stick_y);
+        //Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
+        //Robot.liftMotor.setPower(gamepad2.right_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
         telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
         telemetry.update();
 
+        //set position of auto grippers
         if (gamepad2.a && gamepad2.dpad_left) {
             Robot.rightGripper.setPosition(0);
         } else if (gamepad2.y && gamepad2.dpad_left) {
@@ -82,6 +105,7 @@ public class StandardTeleOp extends OpMode {
             Robot.leftGripper.setPosition(1);
         }
 
+        // set position of foundation manipulator
         if (gamepad2.x && gamepad2.dpad_left) {
             Robot.foundationGripper.setPosition(0.5);
         } else if (gamepad2.b && gamepad2.dpad_left) {
@@ -93,7 +117,29 @@ public class StandardTeleOp extends OpMode {
             isLowGear = false;
         }
 
-        
+        // set lift and pitch motor variables to macro positions
+        if (gamepad2.a) {
+            liftPos = liftPosOne;
+        } else if (gamepad2.b) {
+            liftPos = liftPosTwo;
+        } else if (gamepad2.y) {
+            liftPos = liftPosThree;
+        } else if (gamepad2.x) {
+            liftPos = liftPosFour;
+        }
+        if (gamepad2.dpad_down) {
+            pitchPos = pitchPosOne;
+        } else if (gamepad2.dpad_up) {
+            pitchPos = pitchPosTwo;
+        }
+        // manually change lift and pitch vars
+        liftPos += gamepad2.right_stick_y * deltaTime;
+        pitchPos += gamepad2.left_stick_y * deltaTime;
+        Robot.pitchMotor.setPower(0.7);
+        Robot.liftMotor.setPower(0.7);
+        // set target positions based on vars
+        Robot.pitchMotor.setTargetPosition(pitchPos);
+        Robot.liftMotor.setTargetPosition(liftPos);
 
     }
 

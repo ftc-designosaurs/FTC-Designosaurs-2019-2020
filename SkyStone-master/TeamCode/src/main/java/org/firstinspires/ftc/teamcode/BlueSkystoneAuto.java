@@ -40,7 +40,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
-            telemetry.addData("Cmon man!", "ZTEs Suck m8");
+            telemetry.addData("Sorry!", "incompatible hardware.");
         }
 
         if (tfod != null) {
@@ -54,6 +54,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         waitForStart();
         Robot.init(hardwareMap, 0, 0, 0);
 
+        // move backward to allow camera to detect skystones accurately
         Robot.moveRTP("backward", 1, 15.0, Robot, this, runtime);
 
         if (tfod != null) {
@@ -73,6 +74,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
 
+                    // if the current object is the farthest left, save its position
                     if (recognition.getLabel() == "Skystone") {
                         currentAvg = (recognition.getLeft() + recognition.getRight()) / 2;
                         if (currentAvg < lowestAvg) {
@@ -82,6 +84,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
 
 
                 }
+                //set pos value based on where the detected skystone is
                 telemetry.addData("middle of sky", lowestAvg);
                 if (lowestAvg > 400) {
                     telemetry.addData("Target pos", "Left");
@@ -94,15 +97,13 @@ public class BlueSkystoneAuto extends LinearOpMode{
                     pos = 2;
                 }
                 telemetry.update();
-            } /*else {
-                telemetry.addData("Target pos", "Right");
-            }*/
+            }
 
 
 
         }
 
-        // first
+        // first skystone
         if (pos == 0) {
             Robot.moveRTP("left",1,3.5 ,Robot ,this, runtime);
         } else if (pos == 1) {
@@ -132,10 +133,8 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        //Robot.moveRTP("left", 1, 67 ,Robot,this,runtime);
-        //second
 
-        //Robot.moveRTP("left", .3, 25.0 ,Robot, this, runtime);
+        //second skystone
 
         if (pos == 0) {
             Robot.moveRTP("left",1,62 - 1 ,Robot ,this, runtime);
@@ -169,6 +168,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         }
         Robot.moveRTP("left", 1, 10 ,Robot, this, runtime);
 
+        // shutdown tensorflow when done
         if (tfod != null) {
             tfod.shutdown();
         }

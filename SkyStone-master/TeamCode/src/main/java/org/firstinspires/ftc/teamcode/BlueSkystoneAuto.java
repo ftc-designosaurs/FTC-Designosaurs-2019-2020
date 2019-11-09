@@ -50,6 +50,9 @@ public class BlueSkystoneAuto extends LinearOpMode{
 
 
         waitForStart();
+        Robot.init(hardwareMap, 0, 0, 0);
+
+        Robot.moveRTP("backward", 1, 15.0, Robot, this, runtime);
 
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -94,14 +97,9 @@ public class BlueSkystoneAuto extends LinearOpMode{
             }*/
 
 
-            if (tfod != null) {
-                tfod.shutdown();
-            }
 
         }
-        Robot.init(hardwareMap, 0, 0, 0);
 
-        Robot.moveRTP("backward", 1, 10.0, Robot, this, runtime);
         // first
         if (pos == 0) {
             Robot.moveRTP("left",1,3.5 ,Robot ,this, runtime);
@@ -110,7 +108,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 2) {
             Robot.moveRTP("right",1,10.5 ,Robot ,this, runtime);
         }
-        Robot.moveRTP("backward", .4, 18.0 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .4, 13.0 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(1);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
@@ -168,6 +166,11 @@ public class BlueSkystoneAuto extends LinearOpMode{
             telemetry.update();
         }
         Robot.moveRTP("left", 1, 10 ,Robot, this, runtime);
+
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+
 
     }
     private void initVuforia() {

@@ -14,7 +14,7 @@ public class StandardTeleOp extends OpMode {
     boolean isLowGear = false;
     int pitchPos = 0;
     static int pitchPosOne = 0;
-    static int pitchPosTwo = 100;
+    static int pitchPosTwo = 324;
 
     int liftPos = 0;
     static int liftPosOne = 0;
@@ -34,8 +34,11 @@ public class StandardTeleOp extends OpMode {
         Robot.init(hardwareMap, 0, 0, 0); //initialize motors and sensors
 
         telemetry.addData("status: ", "Ready!");
-        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Robot.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.pitchMotor.setTargetPosition(pitchPos);
+        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Robot.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -48,21 +51,14 @@ public class StandardTeleOp extends OpMode {
         lastTime = runtime.now(TimeUnit.MILLISECONDS);
 
         // set joystick variables
-        if (isLowGear) {
-            lh = gamepad1.left_stick_x/3;
-            lv = -gamepad1.left_stick_y/3;
-            rh = gamepad1.right_stick_x/3;
-        } else {
-            lh = gamepad1.left_stick_x;
-            lv = -gamepad1.left_stick_y;
-            rh = gamepad1.right_stick_x;
-        }
-
+        lh = gamepad1.left_stick_x;
+        lv = -gamepad1.left_stick_y;
+        rh = gamepad1.right_stick_x;
 
         // square for exponential drive
-        lh = Robot.square(lh, Robot.power)/2;
-        lv = Robot.square(lv, Robot.power)/2;
-        rh = Robot.square(rh, Robot.power)/2;
+        lh = Robot.square(lh, Robot.power);
+        lv = Robot.square(lv, Robot.power);
+        rh = Robot.square(rh, Robot.power);
 
         // calculate motor powers for mecanum drive
         fl = -lv + lh + rh;
@@ -71,10 +67,18 @@ public class StandardTeleOp extends OpMode {
         br = lv + lh - rh;
 
         // set motor speeds
-        Robot.frontRight.setPower(fr);
-        Robot.frontLeft.setPower(fl);
-        Robot.backRight.setPower(br);
-        Robot.backLeft.setPower(bl);
+        if (isLowGear) {
+            Robot.frontRight.setPower(fr/3);
+            Robot.frontLeft.setPower(fl/3);
+            Robot.backRight.setPower(br/3);
+            Robot.backLeft.setPower(bl/3);
+        } else {
+            Robot.frontRight.setPower(fr);
+            Robot.frontLeft.setPower(fl);
+            Robot.backRight.setPower(br);
+            Robot.backLeft.setPower(bl);
+        }
+
 
         // set gripper location
         if (gamepad1.left_trigger > .5||gamepad2.left_bumper){
@@ -85,30 +89,30 @@ public class StandardTeleOp extends OpMode {
             Robot.mainGripper.setPosition(.5);
         }
 
-        //Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
-        //Robot.liftMotor.setPower(gamepad2.right_stick_y);
+        Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
+        Robot.liftMotor.setPower(gamepad2.right_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
         telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
         telemetry.update();
 
         //set position of auto grippers
-        if (gamepad2.a && gamepad2.dpad_left) {
+        if (gamepad2.a) {
             Robot.rightGripper.setPosition(0);
         } else if (gamepad2.y && gamepad2.dpad_left) {
             Robot.rightGripper.setPosition(1);
         }
 
-        if (gamepad2.dpad_up && gamepad2.dpad_left) {
+        if (gamepad2.dpad_up) {
             Robot.leftGripper.setPosition(0);
         } else if (gamepad2.dpad_down && gamepad2.dpad_left) {
             Robot.leftGripper.setPosition(1);
         }
 
         // set position of foundation manipulator
-        if (gamepad2.x && gamepad2.dpad_left) {
+        if (gamepad2.x || gamepad1.left_trigger > .5) {
             Robot.foundationGripper.setPosition(0.5);
-        } else if (gamepad2.b && gamepad2.dpad_left) {
+        } else if (gamepad2.b && gamepad1.right_trigger > .5) {
             Robot.foundationGripper.setPosition(1);
         }
         if (gamepad1.left_bumper) {
@@ -127,19 +131,25 @@ public class StandardTeleOp extends OpMode {
         } else if (gamepad2.x) {
             liftPos = liftPosFour;
         }
-        if (gamepad2.dpad_down) {
+        if (gamepad2.dpad_left) {
             pitchPos = pitchPosOne;
-        } else if (gamepad2.dpad_up) {
+        } else if (gamepad2.dpad_right) {
             pitchPos = pitchPosTwo;
         }
+
+        if (gamepad2.left_trigger > .5) {
+            Robot.capstoneGripper.setPosition(0);
+        } else if (gamepad2.right_trigger > .5) {
+            Robot.capstoneGripper.setPosition(1);
+        }
         // manually change lift and pitch vars
-        liftPos += gamepad2.right_stick_y * deltaTime;
-        pitchPos += gamepad2.left_stick_y * deltaTime;
-        Robot.pitchMotor.setPower(0.7);
-        Robot.liftMotor.setPower(0.7);
+        //liftPos += gamepad2.right_stick_y * deltaTime;
+        //pitchPos += gamepad2.left_stick_y * deltaTime;
+        //Robot.pitchMotor.setPower(0.7);
+        //Robot.liftMotor.setPower(0.7);
         // set target positions based on vars
-        Robot.pitchMotor.setTargetPosition(pitchPos);
-        Robot.liftMotor.setTargetPosition(liftPos);
+        //Robot.pitchMotor.setTargetPosition(pitchPos);
+        //Robot.liftMotor.setTargetPosition(liftPos);
 
     }
 

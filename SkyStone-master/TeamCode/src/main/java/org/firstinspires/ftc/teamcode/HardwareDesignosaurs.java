@@ -30,6 +30,7 @@ public class HardwareDesignosaurs {
     public Servo foundationGripper  = null;
     public Servo leftGripper        = null;
     public Servo rightGripper       = null;
+    public Servo capstoneGripper    = null;
 
     // Define Sensors
 
@@ -77,6 +78,7 @@ public class HardwareDesignosaurs {
         foundationGripper = hwMap.get(Servo.class, "foundation_manipulator");
         leftGripper = hwMap.get(Servo.class, "left_auto_manipulator");
         rightGripper = hwMap.get(Servo.class, "right_auto_manipulator");
+        capstoneGripper = hwMap.get(Servo.class, "capstone_manipulator");
 
 
         // Initialize Sensors
@@ -98,6 +100,8 @@ public class HardwareDesignosaurs {
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set Servo Positions
 
@@ -105,6 +109,7 @@ public class HardwareDesignosaurs {
         foundationGripper.setPosition(0);
         leftGripper.setPosition(0);
         rightGripper.setPosition(1);
+        capstoneGripper.setPosition(0);
 
     }
 

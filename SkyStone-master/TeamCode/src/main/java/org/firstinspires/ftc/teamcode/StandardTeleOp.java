@@ -99,20 +99,20 @@ public class StandardTeleOp extends OpMode {
         //set position of auto grippers
         if (gamepad2.a) {
             Robot.rightGripper.setPosition(0);
-        } else if (gamepad2.y && gamepad2.dpad_left) {
+        } else if (gamepad2.y) {
             Robot.rightGripper.setPosition(1);
         }
 
         if (gamepad2.dpad_up) {
             Robot.leftGripper.setPosition(0);
-        } else if (gamepad2.dpad_down && gamepad2.dpad_left) {
+        } else if (gamepad2.dpad_down) {
             Robot.leftGripper.setPosition(1);
         }
 
         // set position of foundation manipulator
         if (gamepad2.x || gamepad1.left_trigger > .5) {
             Robot.foundationGripper.setPosition(0.5);
-        } else if (gamepad2.b && gamepad1.right_trigger > .5) {
+        } else if (gamepad2.b || gamepad1.right_trigger > .5) {
             Robot.foundationGripper.setPosition(1);
         }
         if (gamepad1.left_bumper) {

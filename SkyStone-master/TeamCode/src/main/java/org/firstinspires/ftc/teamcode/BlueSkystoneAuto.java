@@ -56,6 +56,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
 
         // move backward to allow camera to detect skystones accurately
         Robot.moveRTP("backward", .4, 18.5, Robot, this, runtime);
+        Robot.moveRTP("right", .4, 5, Robot, this, runtime);
 
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 750 && opModeIsActive()) {
@@ -113,7 +114,7 @@ public class BlueSkystoneAuto extends LinearOpMode{
         if (pos == 0) {
             Robot.moveRTP("left",1,7.5 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",1,3.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,1 ,Robot ,this, runtime);
         } else if (pos == 2) {
             Robot.moveRTP("right",1,5.5 ,Robot ,this, runtime);
         }
@@ -143,9 +144,9 @@ public class BlueSkystoneAuto extends LinearOpMode{
         //second skystone
 
         if (pos == 0) {
-            Robot.moveRTP("left",1,62 - 1 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,62 - 2 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",1,62- 7 ,Robot ,this, runtime);
+            Robot.moveRTP("left",1,62- 7.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
             Robot.moveRTP("left",1,62 - 12 ,Robot ,this, runtime);
         }
@@ -165,10 +166,10 @@ public class BlueSkystoneAuto extends LinearOpMode{
         } else if (pos == 2) {
             Robot.moveRTP("right", .5, 50.0 ,Robot, this, runtime);
         }
-        Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
+        //Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
         Robot.leftGripper.setPosition(0);
         runtime.reset();
-        while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
+        while (runtime.time(TimeUnit.MILLISECONDS) < 450 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }

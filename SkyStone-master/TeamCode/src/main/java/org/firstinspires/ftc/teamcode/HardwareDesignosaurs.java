@@ -160,7 +160,6 @@ public class HardwareDesignosaurs {
         Robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //set target positions based on direction
-        setTargetPos(Robot.frontRight, encDist);
         if (direction == "forward") {
             setTargetPos(Robot.frontLeft, -encDist);
             setTargetPos(Robot.frontRight, -encDist);

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+// this autonomous program finds the skystones on the blue side and delivers them
 @Autonomous(name="Red Skystone", group="Mechanum")
 public class RedSkystoneAuto extends LinearOpMode{
 
@@ -20,6 +21,7 @@ public class RedSkystoneAuto extends LinearOpMode{
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
 
+    // vuforia licence key
     private static final String VUFORIA_KEY =
             "AdCuaEX/////AAABmXYJgRHZxkB9gj+81cIaX+JZm4W2w3Ee2HhKucJINnuXQ8l214BoCiyEk04zmQ/1VPvo+8PY7Um3eI5rI4WnSJmEXo7jyMz2WZDkkRnA88uBCtbml8CsMSIS7J3aUcgVd9P8ocLLgwqpavhEEaUixEx/16rgzIEtuHcq5ghQzzCkqR1xvAaxnx5lWM+ixf6hBCfZEnaiUM7WjD4gflO55IpoO/CdCWQrGUw2LuUKW2J+4K6ftKwJ+B1Qdy7pt2tDrGZvMyB4AcphPuoJRCSr5NgRoNWZ+WH5LqAdzYEO0Bv7C9LeSgmSPPT7GPPDpjv6+3DO5BE6l+2uMYQQbuF11BWKKq5Xp+D5Y6l2+W97zpgP";
 
@@ -33,12 +35,12 @@ public class RedSkystoneAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        /*initVuforia();
+        initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
-            telemetry.addData("Cmon man!", "ZTEs Suck m8");
+            telemetry.addData("Sorry!", "incompatible hardware.");
         }
 
         if (tfod != null) {
@@ -50,6 +52,17 @@ public class RedSkystoneAuto extends LinearOpMode{
 
 
         waitForStart();
+        Robot.init(hardwareMap, 0, 0, 0);
+
+        // move backward to allow camera to detect skystones accurately
+        Robot.moveRTP("backward", .4, 18.5, Robot, this, runtime);
+        //Robot.moveRTP("left", .4, 5, Robot, this, runtime);
+
+        runtime.reset();
+        while (runtime.time(TimeUnit.MILLISECONDS) < 750 && opModeIsActive()) {
+            telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
+            telemetry.update();
+        }
 
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -59,7 +72,7 @@ public class RedSkystoneAuto extends LinearOpMode{
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
                 // step through the list of recognitions and display boundary info.
                 int i = 0;
-                double highestAvg = Double.NEGATIVE_INFINITY;
+                double lowestAvg = Double.POSITIVE_INFINITY;
                 double currentAvg = 0;
                 for (Recognition recognition : updatedRecognitions) {
                     telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
@@ -68,49 +81,44 @@ public class RedSkystoneAuto extends LinearOpMode{
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
 
+                    // if the current object is the farthest left, save its position
                     if (recognition.getLabel() == "Skystone") {
                         currentAvg = (recognition.getLeft() + recognition.getRight()) / 2;
-                        if (currentAvg > highestAvg) {
-                            highestAvg = currentAvg;
+                        if (currentAvg < lowestAvg) {
+                            lowestAvg = currentAvg;
                         }
                     }
 
 
                 }
-                telemetry.addData("middle of sky", highestAvg);
-                if (highestAvg < 284.5) {
+                //set pos value based on where the detected skystone is
+                telemetry.addData("middle of sky", lowestAvg);
+                if (lowestAvg > 1000) {
                     telemetry.addData("Target pos", "Left");
-                    pos = 2;
-                } else if (highestAvg > 284.5 && highestAvg < 348.25) {
-                    telemetry.addData("Target pos", "Middle");
-                    pos = 1;
-                } else if (highestAvg > 348.25) {
-                    telemetry.addData("Target pos", "Right");
                     pos = 0;
+                } else if (lowestAvg > 320 && lowestAvg < 1000) {
+                    telemetry.addData("Target pos", "Middle");
+                    pos = 2;
+                } else if (lowestAvg < 320) {
+                    telemetry.addData("Target pos", "Right");
+                    pos = 1;
                 }
                 telemetry.update();
             }
 
 
-            if (tfod != null) {
-                tfod.shutdown();
-            }
 
-        }*/
-        waitForStart();
-        pos = 1;
-        Robot.init(hardwareMap, 0, 0, 0);
-
-        Robot.moveRTP("backward", 1, 10.0, Robot, this, runtime);
-        // first
-        if (pos == 0) {
-            Robot.moveRTP("right",1,1.5 ,Robot ,this, runtime);
-        } else if (pos == 1) {
-            Robot.moveRTP("left",1,4.5 ,Robot ,this, runtime);
-        } else if (pos == 2) {
-            Robot.moveRTP("left",1,12.5 ,Robot ,this, runtime);
         }
-        Robot.moveRTP("backward", .4, 17.0 ,Robot, this, runtime);
+
+        // first skystone
+        if (pos == 0) {
+            Robot.moveRTP("right",1,2 ,Robot ,this, runtime);
+        } else if (pos == 1) {
+            Robot.moveRTP("left",1,6 ,Robot ,this, runtime);
+        } else if (pos == 2) {
+            Robot.moveRTP("left",1,10.5 ,Robot ,this, runtime);
+        }
+        Robot.moveRTP("backward", .4, 8 ,Robot, this, runtime);
         Robot.rightGripper.setPosition(0.02);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
@@ -119,11 +127,11 @@ public class RedSkystoneAuto extends LinearOpMode{
         }
         Robot.moveRTP("forward", 1, 9.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("left", .5, 43.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .3, 43.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left", .5, 37.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .3, 37.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left", .5, 32.5 ,Robot, this, runtime);
+            Robot.moveRTP("left", .3, 32.5 ,Robot, this, runtime);
         }
 
         Robot.rightGripper.setPosition(1);
@@ -132,42 +140,46 @@ public class RedSkystoneAuto extends LinearOpMode{
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        //Robot.moveRTP("right", 1, 67 ,Robot,this,runtime);
-        //second
 
-        //Robot.moveRTP("right", .3, 25.0 ,Robot, this, runtime);
+        //second skystone
 
         if (pos == 0) {
-            Robot.moveRTP("right",1,62 - 1 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,62 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right",1,62- 7 ,Robot ,this, runtime);
+            Robot.moveRTP("right",1,62- 7.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
             Robot.moveRTP("right",1,62 - 12 ,Robot ,this, runtime);
         }
 
-        Robot.moveRTP("backward", .2, 9 ,Robot, this, runtime);
+        Robot.moveRTP("backward", .2, 7 ,Robot, this, runtime);
         Robot.rightGripper.setPosition(0.02);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("forward", 1, 10.0 ,Robot, this, runtime);
+        Robot.moveRTP("forward", 1, 8.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("left", .5, 60.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 62.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left", .5, 54.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 56.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left", .5, 48.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .5, 50.0 ,Robot, this, runtime);
         }
-        Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
+        //Robot.moveRTP("backward", 1, 1 ,Robot, this, runtime);
         Robot.rightGripper.setPosition(1);
         runtime.reset();
-        while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
+        while (runtime.time(TimeUnit.MILLISECONDS) < 450 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
-        Robot.moveRTP("right", 1, 10 ,Robot, this, runtime);
+        Robot.moveRTP("right", 1, 12 ,Robot, this, runtime);
+
+        // shutdown tensorflow when done
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+
 
     }
     private void initVuforia() {

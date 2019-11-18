@@ -101,12 +101,12 @@ public class HardwareDesignosaurs {
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set Servo Positions
 
         mainGripper.setPosition(0);
-        foundationGripper.setPosition(0);
+        foundationGripper.setPosition(0.5);
         leftGripper.setPosition(0);
         rightGripper.setPosition(1);
         capstoneGripper.setPosition(0);

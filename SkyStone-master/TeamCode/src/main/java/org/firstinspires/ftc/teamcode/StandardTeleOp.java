@@ -12,6 +12,7 @@ public class StandardTeleOp extends OpMode {
 
     // variables
     boolean isLowGear = false;
+    boolean isPitchLowGear = false;
     int pitchPos = 0;
     static int pitchPosOne = 0;
     static int pitchPosTwo = 324;
@@ -86,10 +87,10 @@ public class StandardTeleOp extends OpMode {
         }
 
         if (gamepad1.right_trigger > .5||gamepad2.right_bumper){
-            Robot.mainGripper.setPosition(.5);
+            Robot.mainGripper.setPosition(.25);
         }
 
-        Robot.pitchMotor.setPower(gamepad2.left_stick_y/1.5);
+        Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
         Robot.liftMotor.setPower(gamepad2.right_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
@@ -111,9 +112,9 @@ public class StandardTeleOp extends OpMode {
 
         // set position of foundation manipulator
         if (gamepad2.x || gamepad1.left_trigger > .5) {
-            Robot.foundationGripper.setPosition(0.5);
+            Robot.foundationGripper.setPosition(0.7);
         } else if (gamepad2.b || gamepad1.right_trigger > .5) {
-            Robot.foundationGripper.setPosition(1);
+            Robot.foundationGripper.setPosition(0.9);
         }
         if (gamepad1.left_bumper) {
             isLowGear = true;

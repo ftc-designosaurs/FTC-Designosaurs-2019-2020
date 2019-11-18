@@ -94,13 +94,15 @@ public class HardwareDesignosaurs {
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
+        pitchMotor.setPower(0.7);
+        pitchMotor.setTargetPosition(0);
 
         // Enable All Encoders
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set Servo Positions

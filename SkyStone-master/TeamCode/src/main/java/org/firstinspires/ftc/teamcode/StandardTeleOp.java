@@ -37,8 +37,8 @@ public class StandardTeleOp extends OpMode {
         telemetry.addData("status: ", "Ready!");
         Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.pitchMotor.setTargetPosition(pitchPos);
-        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //Robot.pitchMotor.setTargetPosition(pitchPos);
+        //Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Robot.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -90,7 +90,7 @@ public class StandardTeleOp extends OpMode {
             Robot.mainGripper.setPosition(.25);
         }
 
-        Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
+        //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
         Robot.liftMotor.setPower(gamepad2.right_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
@@ -98,11 +98,11 @@ public class StandardTeleOp extends OpMode {
         telemetry.update();
 
         //set position of auto grippers
-        if (gamepad2.a) {
+        /*if (gamepad2.a) {
             Robot.rightGripper.setPosition(0);
         } else if (gamepad2.y) {
             Robot.rightGripper.setPosition(1);
-        }
+        }*/
 
         if (gamepad2.dpad_up) {
             Robot.leftGripper.setPosition(0);
@@ -120,6 +120,13 @@ public class StandardTeleOp extends OpMode {
             isLowGear = true;
         } else if (gamepad1.right_bumper) {
             isLowGear = false;
+        }
+        if (gamepad2.a) {
+            Robot.pitchMotor.setTargetPosition(658);
+            Robot.pitchMotor.setPower(.8);
+        } else if (gamepad2.y) {
+            Robot.pitchMotor.setTargetPosition(0);
+            Robot.pitchMotor.setPower(.8);
         }
 
         // set lift and pitch motor variables to macro positions

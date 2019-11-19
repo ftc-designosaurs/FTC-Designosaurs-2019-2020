@@ -107,8 +107,8 @@ public class HardwareDesignosaurs {
 
         // Set Servo Positions
 
-        mainGripper.setPosition(0);
-        foundationGripper.setPosition(0.5);
+        mainGripper.setPosition(1);
+        foundationGripper.setPosition(0.7);
         leftGripper.setPosition(0);
         rightGripper.setPosition(1);
         capstoneGripper.setPosition(0);

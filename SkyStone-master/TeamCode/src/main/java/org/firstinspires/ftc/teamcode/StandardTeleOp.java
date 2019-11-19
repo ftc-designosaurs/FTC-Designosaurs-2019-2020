@@ -38,7 +38,7 @@ public class StandardTeleOp extends OpMode {
         Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //Robot.pitchMotor.setTargetPosition(pitchPos);
-        //Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Robot.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -82,19 +82,23 @@ public class StandardTeleOp extends OpMode {
 
 
         // set gripper location
-        if (gamepad1.left_trigger > .5||gamepad2.left_bumper){
+        if (gamepad2.right_bumper){
             Robot.mainGripper.setPosition(1);
         }
 
-        if (gamepad1.right_trigger > .5||gamepad2.right_bumper){
+        if (gamepad2.left_bumper){
             Robot.mainGripper.setPosition(.25);
         }
 
         //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
-        Robot.liftMotor.setPower(gamepad2.right_stick_y);
+        Robot.liftMotor.setPower(gamepad2.left_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
         telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
+        telemetry.addData("fr",Robot.frontRight.getCurrentPosition());
+        telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
+        telemetry.addData("br",Robot.backRight.getCurrentPosition());
+        telemetry.addData("bl",Robot.backLeft.getCurrentPosition());
         telemetry.update();
 
         //set position of auto grippers
@@ -121,12 +125,18 @@ public class StandardTeleOp extends OpMode {
         } else if (gamepad1.right_bumper) {
             isLowGear = false;
         }
-        if (gamepad2.a) {
+        if (gamepad2.y) {
             Robot.pitchMotor.setTargetPosition(658);
-            Robot.pitchMotor.setPower(.8);
-        } else if (gamepad2.y) {
+            //Robot.pitchMotor.setPower(.8);
+        } else if (gamepad2.a) {
             Robot.pitchMotor.setTargetPosition(0);
-            Robot.pitchMotor.setPower(.8);
+            //Robot.pitchMotor.setPower(.8);
+        }
+        if (Robot.pitchMotor.getCurrentPosition() < 456) {
+            Robot.pitchMotor.setPower(.5);
+        } else {
+            Robot.pitchMotor.setPower(.1);
+
         }
 
         // set lift and pitch motor variables to macro positions

@@ -56,7 +56,7 @@ public class RedSkystoneAuto extends LinearOpMode{
 
         // move backward to allow camera to detect skystones accurately
         Robot.moveRTP("backward", .4, 18.5, Robot, this, runtime);
-        //Robot.moveRTP("left", .4, 5, Robot, this, runtime);
+        Robot.moveRTP("left", .4, 1.5, Robot, this, runtime);
 
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 750 && opModeIsActive()) {
@@ -112,14 +112,14 @@ public class RedSkystoneAuto extends LinearOpMode{
 
         // first skystone
         if (pos == 0) {
-            Robot.moveRTP("right",1,2 ,Robot ,this, runtime);
+            Robot.moveRTP("right",.5,2 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",1,6 ,Robot ,this, runtime);
+            Robot.moveRTP("left",.5,5 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left",1,10.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",.5,10.5 ,Robot ,this, runtime);
         }
         Robot.moveRTP("backward", .4, 8 ,Robot, this, runtime);
-        Robot.rightGripper.setPosition(0.02);
+        Robot.rightGripper.setPosition(0.05);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
@@ -144,15 +144,15 @@ public class RedSkystoneAuto extends LinearOpMode{
         //second skystone
 
         if (pos == 0) {
-            Robot.moveRTP("right",1,62 ,Robot ,this, runtime);
+            Robot.moveRTP("right",.5,62 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("right",1,62- 7.5 ,Robot ,this, runtime);
+            Robot.moveRTP("right",.5,62- 7.5 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("right",1,62 - 12 ,Robot ,this, runtime);
+            Robot.moveRTP("right",.5,62 - 12 ,Robot ,this, runtime);
         }
 
         Robot.moveRTP("backward", .2, 7 ,Robot, this, runtime);
-        Robot.rightGripper.setPosition(0.02);
+        Robot.rightGripper.setPosition(0.05);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));

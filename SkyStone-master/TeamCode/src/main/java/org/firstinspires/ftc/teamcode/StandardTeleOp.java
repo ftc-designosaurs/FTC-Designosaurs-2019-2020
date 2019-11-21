@@ -13,6 +13,7 @@ public class StandardTeleOp extends OpMode {
     // variables
     boolean isLowGear = false;
     boolean isPitchLowGear = false;
+    boolean wasPitchReset = false;
     int pitchPos = 0;
     static int pitchPosOne = 0;
     static int pitchPosTwo = 324;
@@ -90,6 +91,19 @@ public class StandardTeleOp extends OpMode {
             Robot.mainGripper.setPosition(.25);
         }
 
+        if (gamepad2.dpad_left) {
+            if (!wasPitchReset) {
+                wasPitchReset = true;
+                Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                Robot.pitchMotor.setPower(-0.1);
+            }
+        } else {
+            if (wasPitchReset) {
+                wasPitchReset = false;
+                Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+        }
         //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
         Robot.liftMotor.setPower(gamepad2.left_stick_y);
 

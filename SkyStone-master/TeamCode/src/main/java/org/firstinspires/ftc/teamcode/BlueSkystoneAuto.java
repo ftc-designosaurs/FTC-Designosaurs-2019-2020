@@ -96,10 +96,10 @@ public class BlueSkystoneAuto extends LinearOpMode{
                 if (lowestAvg > 1000) {
                     telemetry.addData("Target pos", "Left");
                     pos = 0;
-                } else if (lowestAvg > 320 && lowestAvg < 1000) {
+                } else if (lowestAvg > 391 && lowestAvg < 1000) {
                     telemetry.addData("Target pos", "Middle");
                     pos = 1;
-                } else if (lowestAvg < 320) {
+                } else if (lowestAvg < 391) {
                     telemetry.addData("Target pos", "Right");
                     pos = 2;
                 }

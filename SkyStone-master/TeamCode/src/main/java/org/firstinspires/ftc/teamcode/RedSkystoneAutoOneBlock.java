@@ -59,7 +59,7 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         Robot.moveRTP("left", .4, 1.5, Robot, this, runtime);
 
         runtime.reset();
-        while (runtime.time(TimeUnit.MILLISECONDS) < 750 && opModeIsActive()) {
+        while (runtime.time(TimeUnit.MILLISECONDS) < 1000 && opModeIsActive()) {
             telemetry.addData("time elapsed", runtime.time(TimeUnit.MILLISECONDS));
             telemetry.update();
         }
@@ -96,10 +96,10 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
                 if (lowestAvg > 1000) {
                     telemetry.addData("Target pos", "Left");
                     pos = 0;
-                } else if (lowestAvg > 320 && lowestAvg < 1000) {
+                } else if (lowestAvg > 330 && lowestAvg < 1000) {
                     telemetry.addData("Target pos", "Middle");
                     pos = 2;
-                } else if (lowestAvg < 320) {
+                } else if (lowestAvg < 330) {
                     telemetry.addData("Target pos", "Right");
                     pos = 1;
                 }
@@ -112,13 +112,21 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
 
         // first skystone
         if (pos == 0) {
-            Robot.moveRTP("right",.2,2 ,Robot ,this, runtime);
+            Robot.moveRTP("right",.2,1.95 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",.2,5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",.2,4.55 ,Robot ,this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left",.2,10.5 ,Robot ,this, runtime);
+            Robot.moveRTP("left",.2,10 ,Robot ,this, runtime);
         }
-        Robot.moveRTP("backward", .2, 8 ,Robot, this, runtime);
+
+        if (pos == 0) {
+            Robot.moveRTP("backward", .2, 8.7 ,Robot, this, runtime);
+        } else if (pos == 1) {
+            Robot.moveRTP("backward", .2, 8.7 ,Robot, this, runtime);
+        } else if (pos == 2) {
+            Robot.moveRTP("backward", .2, 8.8 ,Robot, this, runtime);
+        }
+
         Robot.rightGripper.setPosition(0.05);
         runtime.reset();
         while (runtime.time(TimeUnit.MILLISECONDS) < 500 && opModeIsActive()) {
@@ -142,6 +150,8 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         }
 
         Robot.moveRTP("right", .2, 12 ,Robot, this, runtime);
+        Robot.moveRTP("backward",.1,8,Robot,this,runtime);
+
 
         // shutdown tensorflow when done
         if (tfod != null) {

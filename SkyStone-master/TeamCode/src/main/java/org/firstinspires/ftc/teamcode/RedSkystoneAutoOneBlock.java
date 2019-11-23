@@ -114,15 +114,15 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         if (pos == 0) {
             Robot.moveRTP("right",.2,1.95 ,Robot ,this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left",.2,4.55 ,Robot ,this, runtime);
+            Robot.moveRTP("left",.2,4.45 ,Robot ,this, runtime);
         } else if (pos == 2) {
             Robot.moveRTP("left",.2,10 ,Robot ,this, runtime);
         }
 
         if (pos == 0) {
-            Robot.moveRTP("backward", .2, 8.7 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .2, 8.95 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("backward", .2, 8.7 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .2, 8.95 ,Robot, this, runtime);
         } else if (pos == 2) {
             Robot.moveRTP("backward", .2, 8.8 ,Robot, this, runtime);
         }
@@ -135,11 +135,11 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         }
         Robot.moveRTP("forward", .2, 9.0 ,Robot, this, runtime);
         if (pos == 0) {
-            Robot.moveRTP("left", .2, 43.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .2, 40.0 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("left", .2, 37.0 ,Robot, this, runtime);
+            Robot.moveRTP("left", .2, 34.0 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("left", .2, 32.5 ,Robot, this, runtime);
+            Robot.moveRTP("left", .2, 29.5 ,Robot, this, runtime);
         }
 
         Robot.rightGripper.setPosition(1);

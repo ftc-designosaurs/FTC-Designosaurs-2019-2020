@@ -91,7 +91,7 @@ public class StandardTeleOp extends OpMode {
             Robot.mainGripper.setPosition(.25);
         }
 
-        if (gamepad2.dpad_left) {
+        /*if (gamepad2.dpad_left) {
             if (!wasPitchReset) {
                 wasPitchReset = true;
                 Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -103,7 +103,7 @@ public class StandardTeleOp extends OpMode {
                 Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
-        }
+        }*/
         //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
         Robot.liftMotor.setPower(gamepad2.left_stick_y);
 

@@ -105,7 +105,7 @@ public class StandardTeleOp extends OpMode {
             }
         }*/
         //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
-        Robot.liftMotor.setPower(gamepad2.left_stick_y);
+        Robot.liftMotor.setPower(gamepad2.left_stick_y/2);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
         telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());

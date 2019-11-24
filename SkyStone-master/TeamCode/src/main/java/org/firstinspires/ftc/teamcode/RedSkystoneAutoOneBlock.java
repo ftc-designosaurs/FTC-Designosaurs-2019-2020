@@ -120,11 +120,11 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         }
 
         if (pos == 0) {
-            Robot.moveRTP("backward", .2, 8.95 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .2, 11.7 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("backward", .2, 8.95 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .2, 11.7 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("backward", .2, 8.8 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .2, 11.55 ,Robot, this, runtime);
         }
 
         Robot.rightGripper.setPosition(0.05);
@@ -150,7 +150,7 @@ public class RedSkystoneAutoOneBlock extends LinearOpMode{
         }
 
         Robot.moveRTP("right", .2, 12 ,Robot, this, runtime);
-        Robot.moveRTP("backward",.1,8,Robot,this,runtime);
+        Robot.moveRTP("backward",.1,10,Robot,this,runtime);
 
 
         // shutdown tensorflow when done

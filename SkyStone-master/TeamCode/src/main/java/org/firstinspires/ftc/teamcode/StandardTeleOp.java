@@ -129,9 +129,9 @@ public class StandardTeleOp extends OpMode {
         }
 
         // set position of foundation manipulator
-        if (gamepad2.x || gamepad1.left_trigger > .5) {
+        if (gamepad1.left_trigger > .5) {
             Robot.foundationGripper.setPosition(0.7);
-        } else if (gamepad2.b || gamepad1.right_trigger > .5) {
+        } else if (gamepad1.right_trigger > .5) {
             Robot.foundationGripper.setPosition(0.9);
         }
         if (gamepad1.left_bumper) {
@@ -146,7 +146,13 @@ public class StandardTeleOp extends OpMode {
             Robot.pitchMotor.setTargetPosition(0);
             //Robot.pitchMotor.setPower(.8);
         }
-        if (Robot.pitchMotor.getCurrentPosition() < 456) {
+        if (gamepad2.x) {
+            Robot.pitchMotor.setTargetPosition(724);
+        }
+        if (gamepad2.b) {
+            Robot.pitchMotor.setTargetPosition(1071);
+        }
+        if (Robot.pitchMotor.getCurrentPosition() < 456 || Robot.pitchMotor.getCurrentPosition() > 800) {
             Robot.pitchMotor.setPower(.5);
         } else {
             Robot.pitchMotor.setPower(.1);

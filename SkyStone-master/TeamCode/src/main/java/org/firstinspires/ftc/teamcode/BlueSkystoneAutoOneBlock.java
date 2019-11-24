@@ -120,11 +120,11 @@ public class BlueSkystoneAutoOneBlock extends LinearOpMode{
         }
 
         if (pos == 0) {
-            Robot.moveRTP("backward", .4, 8.5 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .4, 11.25 ,Robot, this, runtime);
         } else if (pos == 1) {
-            Robot.moveRTP("backward", .4, 8.75 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .4, 11.5 ,Robot, this, runtime);
         } else if (pos == 2) {
-            Robot.moveRTP("backward", .4, 9 ,Robot, this, runtime);
+            Robot.moveRTP("backward", .4, 11.75 ,Robot, this, runtime);
         }
 
         Robot.leftGripper.setPosition(1);
@@ -150,7 +150,7 @@ public class BlueSkystoneAutoOneBlock extends LinearOpMode{
         }
         
         Robot.moveRTP("left", 1, 15 ,Robot, this, runtime);
-        Robot.moveRTP("backward",.1,8,Robot,this,runtime);
+        Robot.moveRTP("backward",.1,9,Robot,this,runtime);
 
         // shutdown tensorflow when done
         if (tfod != null) {

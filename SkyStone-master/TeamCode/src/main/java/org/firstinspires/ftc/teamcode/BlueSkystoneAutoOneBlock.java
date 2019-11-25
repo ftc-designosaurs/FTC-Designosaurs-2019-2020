@@ -93,10 +93,10 @@ public class BlueSkystoneAutoOneBlock extends LinearOpMode{
                 }
                 //set pos value based on where the detected skystone is
                 telemetry.addData("middle of sky", lowestAvg);
-                if (lowestAvg > 1000) {
+                if (lowestAvg > 600) {
                     telemetry.addData("Target pos", "Left");
                     pos = 0;
-                } else if (lowestAvg > 391 && lowestAvg < 1000) {
+                } else if (lowestAvg > 391 && lowestAvg < 600) {
                     telemetry.addData("Target pos", "Middle");
                     pos = 1;
                 } else if (lowestAvg < 391) {

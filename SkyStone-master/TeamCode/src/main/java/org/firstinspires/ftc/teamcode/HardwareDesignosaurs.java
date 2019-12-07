@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -33,6 +38,9 @@ public class HardwareDesignosaurs {
     public Servo capstoneGripper    = null;
 
     // Define Sensors
+    public BNO055IMU imu = null;
+    Orientation angles = null;
+    double heading = 0;
 
     // Define Variables
     public double startEncoder;
@@ -83,6 +91,9 @@ public class HardwareDesignosaurs {
 
         // Initialize Sensors
 
+        imu = hwMap.get(BNO055IMU.class,"imu");
+
+
         // Set Motor Directions
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -116,6 +127,20 @@ public class HardwareDesignosaurs {
     }
 
     // Functions
+    public void initIMU() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        // parameters.calibrationDataFile = "not yet created";
+        imu.initialize(parameters);
+    }
+
+
+    public void updateIMU() {
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        heading = angles.firstAngle;
+    }
+
+
     public double square(double base, int power) { //function that does fractional squaring
         if (base == 0) {
             return 0;

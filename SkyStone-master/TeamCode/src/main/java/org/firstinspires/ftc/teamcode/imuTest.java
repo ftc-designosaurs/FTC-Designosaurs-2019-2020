@@ -17,7 +17,7 @@ public class imuTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     double speed = .2;
-    double skewGain = 0.01;
+    double skewGain = 0.001;
 
     @Override
     public void runOpMode() {
@@ -32,17 +32,20 @@ public class imuTest extends LinearOpMode {
         waitForStart();
 
         runtime.reset();
+        Robot.updateIMU();
         double target = Robot.heading;
-        while (runtime.time(TimeUnit.SECONDS) < 3) {
+        while (opModeIsActive()) {
+            Robot.updateIMU();
             double skewComp = (target - Robot.heading) * skewGain;
-            Robot.frontLeft.setPower(-(speed) - skewComp);
-            Robot.frontRight.setPower(-(speed) + skewComp);
+            Robot.frontLeft.setPower(-(speed) + skewComp);
+            Robot.frontRight.setPower(-(speed) - skewComp);
             Robot.backLeft.setPower(speed + skewComp);
             Robot.backRight.setPower(speed - skewComp);
 
             telemetry.addData("Heading: ", Robot.angles.firstAngle);
-            telemetry.addData("Roll: ", Robot.angles.firstAngle);
-            telemetry.addData("Pitch: ", Robot.angles.firstAngle);
+            telemetry.addData("Normal Heading: ", Robot.heading);
+            telemetry.addData("Roll: ", Robot.angles.secondAngle);
+            telemetry.addData("Pitch: ", Robot.angles.thirdAngle);
             telemetry.update();
         }
         Robot.setPowers(Robot,0);

@@ -42,10 +42,10 @@ public class HardwareDesignosaurs {
     public Servo capstoneGripper    = null;
 
     // Define Sensors
-    public BNO055IMU imu = null;
-    Orientation angles = null;
-    Acceleration gravity;
-    double heading = 0;
+//    public BNO055IMU imu = null;
+//    Orientation angles = null;
+//    Acceleration gravity;
+//    double heading = 0;
 
     // Define Variables
     public double startEncoder;
@@ -96,7 +96,7 @@ public class HardwareDesignosaurs {
 
         // Initialize Sensors
 
-        imu = hwMap.get(BNO055IMU.class,"imu");
+//        imu = hwMap.get(BNO055IMU.class,"imu");
 
 
         // Set Motor Directions
@@ -132,26 +132,26 @@ public class HardwareDesignosaurs {
     }
 
     // Functions
-    public void initIMU() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        imu.initialize(parameters);
-
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-
-    }
-
-
-    public void updateIMU() {
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        heading = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle));
-    }
+//    public void initIMU() {
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+//        parameters.loggingEnabled      = true;
+//        parameters.loggingTag          = "IMU";
+//        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+//
+//        imu.initialize(parameters);
+//
+//        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//
+//    }
+//
+//
+//    public void updateIMU() {
+//        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+//        heading = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle));
+//    }
 
 
     public double square(double base, int power) { //function that does fractional squaring

@@ -100,6 +100,9 @@ public class imuTest2 extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
+        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        gravity  = imu.getGravity();
+
         double target = Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
 
         while (opModeIsActive()) {
@@ -107,7 +110,7 @@ public class imuTest2 extends LinearOpMode
             telemetry.update();
             angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             gravity  = imu.getGravity();
-            double skewComp = (target - Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle)) * skewGain);
+            double skewComp = (target - Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle)) * -skewGain);
             Robot.frontLeft.setPower(-(speed) + skewComp);
             Robot.frontRight.setPower(-(speed) - skewComp);
             Robot.backLeft.setPower(speed + skewComp);

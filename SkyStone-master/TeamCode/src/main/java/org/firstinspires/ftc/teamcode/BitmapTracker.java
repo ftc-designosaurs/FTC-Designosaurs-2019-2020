@@ -27,7 +27,8 @@ public class BitmapTracker extends LinearOpMode {
     final boolean diaplayMonitor = true;
     final boolean useWebcam = true;
     boolean awaitingCapture = false;
-
+    int targetX = 380;
+    int borderX = 0;
 
     VuforiaLocalizer vuforia;
 
@@ -67,10 +68,14 @@ public class BitmapTracker extends LinearOpMode {
 
             if (gamepad1.b && !awaitingCapture) {
                 findBorder();
+
             }
         }
 
 
+
+    }
+    void updateMotors () {
 
     }
     void findBorder () {
@@ -101,13 +106,13 @@ public class BitmapTracker extends LinearOpMode {
                             if (lastRed > 50) {
                                 done = true;
                             } else {
-                                x++;
+                                x--;
                             }
                         } else {
                             if (lastRed < 50) {
                                 done = true;
                             } else {
-                                x--;
+                                x++;
                             }
 
                         }
@@ -115,6 +120,7 @@ public class BitmapTracker extends LinearOpMode {
                             done = true;
                     }
                     telemetry.addData("border pos",x);
+                    borderX = x;
                 } else {
                     telemetry.addData("no image","");
                     telemetry.update();

@@ -86,7 +86,7 @@ public class CameraSubClass {
                             }
 
                         }
-                        if (x < 0 || x > width)
+                        if (x <= 0 || x >= width)
                             done = true;
                     }
                     borderX = x;

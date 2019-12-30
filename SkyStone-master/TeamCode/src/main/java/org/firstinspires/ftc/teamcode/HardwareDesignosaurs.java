@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -42,6 +44,7 @@ public class HardwareDesignosaurs {
     public Servo capstoneGripper    = null;
 
     // Define Sensors
+    public DistanceSensor distance = null;
 //    public BNO055IMU imu = null;
 //    Orientation angles = null;
 //    Acceleration gravity;
@@ -95,6 +98,7 @@ public class HardwareDesignosaurs {
 
 
         // Initialize Sensors
+        distance = hwMap.get(DistanceSensor.class,"sensor_range");
 
 //        imu = hwMap.get(BNO055IMU.class,"imu");
 
@@ -284,6 +288,17 @@ public class HardwareDesignosaurs {
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
+    }
+
+    void moveDirection(double north, double west, double rotate, HardwareDesignosaurs robot) {
+        robot.frontLeft.setPower(-north + west + rotate);
+        robot.frontRight.setPower(-north - west - rotate);
+        robot.backLeft.setPower(north - west + rotate);
+        robot.backRight.setPower(north + west - rotate);
+    }
+
+    double getDistance() {
+        return distance.getDistance(DistanceUnit.INCH);
     }
 }
 

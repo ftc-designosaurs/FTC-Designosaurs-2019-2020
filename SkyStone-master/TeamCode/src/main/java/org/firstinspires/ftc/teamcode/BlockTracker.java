@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.robocol.RobocolConfig;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -36,7 +37,7 @@ public class BlockTracker extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        camera.init(hardwareMap);
+        camera.init(hardwareMap, CameraSubClass.Border.LEFT);
         imu.init(hardwareMap);
         robot.init(hardwareMap,0,0,0);
 
@@ -44,6 +45,10 @@ public class BlockTracker extends LinearOpMode {
         waitForStart();
         imu.loop();
         double imuTarget = imu.getHeading();
+
+        robot.moveRTP("backward", .4, 20, robot, this, time);
+        robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         lastTime = time.now(TimeUnit.MILLISECONDS);
         while (opModeIsActive()) {
 
@@ -94,7 +99,7 @@ public class BlockTracker extends LinearOpMode {
             imuOut = imuError + imuInt;
             disOut = disError + disInt;
 
-            if (Math.abs(camOut) + Math.abs(disOut) + Math.abs(imuOut) < .15) {
+            if (Math.abs(camOut) + Math.abs(disOut) + Math.abs(imuOut) < .08) {
                 telemetry.addData("good"," enough");
                 if (fireAtWill == 1) {
                     fireAtWill = 2;
@@ -118,10 +123,10 @@ public class BlockTracker extends LinearOpMode {
 
             if (gamepad1.b || fireAtWill == 2) {
                 robot.setPowers(robot,0);
-                robot.moveRTP("backward",.2,7,robot,this,time);
+                robot.moveRTP("backward",.2,10,robot,this,time);
                 robot.leftGripper.setPosition(1);
                 robot.wait(1,this,time);
-                robot.moveRTP("forward",.2,7,robot,this,time);
+                robot.moveRTP("forward",.2,10,robot,this,time);
                 break;
             }
         }

@@ -182,8 +182,8 @@ public class HardwareDesignosaurs {
 
     public void setTargetPos (DcMotor motor, double position) {
         // this function sets the specified motor to go to the specified position
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setTargetPosition( (int) Math.round(position));
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void setPowers (HardwareDesignosaurs Robot, double speed) {
@@ -307,6 +307,13 @@ public class HardwareDesignosaurs {
             opMode.telemetry.addData("wait","ing");
             opMode.telemetry.update();
         }
+    }
+
+    void setMode(DcMotor.RunMode mode){
+        frontRight.setMode(mode);
+        frontLeft.setMode(mode);
+        backRight.setMode(mode);
+        backLeft.setMode(mode);
     }
 }
 

@@ -15,17 +15,25 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 public class CameraSubClass {
+
+    enum Border {
+        LEFT,
+        RIGHT,
+        NONE
+    }
     final boolean diaplayMonitor = true;
     final boolean useWebcam = true;
     boolean awaitingCapture = false;
     int targetX = 380;
     int borderX = 0;
+    Border border = Border.NONE;
 
     VuforiaLocalizer vuforia;
 
     WebcamName webcamName;
 
-    void init(HardwareMap hardwareMap) {
+    void init(HardwareMap hardwareMap, Border line) {
+        border = line;
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -66,7 +74,8 @@ public class CameraSubClass {
                     int width = bitmap.getWidth();
                     int height = bitmap.getHeight();
                     boolean done = false;
-                    int x = width / 2;
+                    //int x = width / 2;
+                    int x = 0;
                     int y = height / 2;
                     int lastRed = Color.red(bitmap.getPixel(x,y));
                     while (!done) {
@@ -76,13 +85,21 @@ public class CameraSubClass {
                             if (lastRed > 50) {
                                 done = true;
                             } else {
-                                x--;
+                                if (border == Border.LEFT) {
+                                    x--;
+                                } else {
+                                    x++;
+                                }
                             }
                         } else {
                             if (lastRed < 50) {
                                 done = true;
                             } else {
-                                x++;
+                                if (border == Border.LEFT) {
+                                    x++;
+                                } else {
+                                    x--;
+                                }
                             }
 
                         }

@@ -300,5 +300,13 @@ public class HardwareDesignosaurs {
     double getDistance() {
         return distance.getDistance(DistanceUnit.INCH);
     }
+
+    void wait(double seconds, LinearOpMode opMode, ElapsedTime time) {
+        double startTime = time.now(TimeUnit.MILLISECONDS);
+        while (startTime - time.now(TimeUnit.MILLISECONDS) < seconds / 1000 && opMode.opModeIsActive()) {
+            opMode.telemetry.addData("wait","ing");
+            opMode.telemetry.update();
+        }
+    }
 }
 

@@ -3,18 +3,36 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.robocol.RobocolConfig;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "Block Tracker", group = "Sensor")
 public class BlockTracker extends LinearOpMode {
     CameraSubClass camera = new CameraSubClass();
     ImuSubClass imu = new ImuSubClass();
     HardwareDesignosaurs robot = new HardwareDesignosaurs();
+    ElapsedTime time = new ElapsedTime();
 
     double camError;
     double imuError;
     double disError;
+
+    double camInt;
+    double imuInt;
+    double disInt;
+
+    double camOut;
+    double imuOut;
+    double disOut;
+
+    double lastTime;
+    double deltTime;
+    double currTime;
+
+    double fireAtWill = 0;
 
     @Override
     public void runOpMode() {
@@ -26,29 +44,89 @@ public class BlockTracker extends LinearOpMode {
         waitForStart();
         imu.loop();
         double imuTarget = imu.getHeading();
-
+        lastTime = time.now(TimeUnit.MILLISECONDS);
         while (opModeIsActive()) {
+
+            // find delta time
+            currTime = time.now(TimeUnit.MILLISECONDS);
+            deltTime = (currTime - lastTime)/1000;
+            lastTime = currTime;
+
+            // loop sensors
             camera.loop();
             imu.loop();
 
-            camError =  310 - camera.getBorderX();
-            imuError = imu.getHeading() - imuTarget;
-            disError = 10 - robot.getDistance();
+            // find errors
+            camError = (310 - (double) camera.getBorderX())/350;
+            imuError = (imu.getHeading() - imuTarget)/60;
+            disError = (10 - robot.getDistance())/20;
 
-            telemetry.addData("cam: ", camError);
-            telemetry.addData("imu: ", imuError);
-            telemetry.addData("dis: ", disError);
-            telemetry.update();
-
-
-            if (imuError > 10) {
+            if (Math.abs(disError) > .5) {
                 disError = 0;
-                camError = 0;
-            } else if (disError > 2) {
+            }
+            if (Math.abs(camError) > .5) {
                 camError = 0;
             }
+            // calculate integrals
+            camInt = loopIntegral(camError, .2, camInt, deltTime, 0.1);
+            imuInt = loopIntegral(imuError, .2, imuInt, deltTime, 0.1);
+            disInt = loopIntegral(disError, .2, disInt, deltTime, 0.1);
 
-            robot.moveDirection(disError/20, camError/350, imuError/100, robot);
+            // log telemetry
+            telemetry.addData("camErr: ", camError);
+            telemetry.addData("camVal: ", camera.getBorderX());
+            telemetry.addData("imuErr: ", imuError);
+            telemetry.addData("disErr: ", disError);
+            telemetry.addData("camInt: ", camInt);
+            telemetry.addData("imuInt: ", imuInt);
+            telemetry.addData("disInt: ", disInt);
+            telemetry.update();
+            
+            // calculate output
+            camOut = camError + camInt;
+            imuOut = imuError + imuInt;
+            disOut = disError + disInt;
+
+            if (Math.abs(camOut) + Math.abs(disOut) + Math.abs(imuOut) < .15) {
+                telemetry.addData("good"," enough");
+                if (fireAtWill == 1) {
+                    fireAtWill = 2;
+                }
+            }
+
+            if (gamepad1.a && fireAtWill == 0) {
+                fireAtWill = 1;
+            }
+
+            // zero values from sensors with high probability of failing
+            if (imuError > 0.15) {
+                disOut = 0;
+                camOut = 0;
+            } else if (disError > 0.075) {
+                camOut = 0;
+            }
+
+            // output to drivetrain
+            robot.moveDirection(disOut, camOut, imuOut, robot);
+
+            if (gamepad1.b || fireAtWill == 2) {
+                robot.setPowers(robot,0);
+                robot.moveRTP("backward",.2,7,robot,this,time);
+                robot.leftGripper.setPosition(1);
+                robot.wait(1,this,time);
+                robot.moveRTP("forward",.2,7,robot,this,time);
+                break;
+            }
         }
+    }
+
+    double loopIntegral(double input, double cuttoff, double last, double deltaT, double intGain) {
+        double output;
+        if (input > cuttoff) {
+            output = 0;
+        } else {
+            output = last + (input * deltaT * intGain);
+        }
+        return output;
     }
 }

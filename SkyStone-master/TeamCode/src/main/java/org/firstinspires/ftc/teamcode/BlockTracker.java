@@ -64,9 +64,16 @@ public class BlockTracker extends LinearOpMode {
             if (Math.abs(disError) > .5) {
                 disError = 0;
             }
-            if (Math.abs(camError) > .5) {
-                camError = 0;
-            }
+
+            camError = Math.min(Math.max(camError, -.2),2);
+            imuError = Math.min(Math.max(imuError, -.2),2);
+            disError = Math.min(Math.max(disError, -.2),2);
+
+
+//            if (Math.abs(camError) > .5) {
+//                camError = 0;
+//            }
+
             // calculate integrals
             camInt = loopIntegral(camError, .2, camInt, deltTime, 0.1);
             imuInt = loopIntegral(imuError, .2, imuInt, deltTime, 0.1);

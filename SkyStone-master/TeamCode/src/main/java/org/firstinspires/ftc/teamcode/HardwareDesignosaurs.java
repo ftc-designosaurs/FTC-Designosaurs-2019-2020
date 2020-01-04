@@ -303,7 +303,7 @@ public class HardwareDesignosaurs {
 
     void wait(double seconds, LinearOpMode opMode, ElapsedTime time) {
         double startTime = time.now(TimeUnit.MILLISECONDS);
-        while (startTime - time.now(TimeUnit.MILLISECONDS) < seconds / 1000 && opMode.opModeIsActive()) {
+        while (time.now(TimeUnit.MILLISECONDS) - startTime < seconds * 1000 && opMode.opModeIsActive()) {
             opMode.telemetry.addData("wait","ing");
             opMode.telemetry.update();
         }

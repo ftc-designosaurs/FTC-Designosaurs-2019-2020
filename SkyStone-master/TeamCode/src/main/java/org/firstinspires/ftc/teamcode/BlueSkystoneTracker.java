@@ -55,7 +55,7 @@ public class BlueSkystoneTracker extends LinearOpMode {
         robot.wait(1,this,time);
 
         robot.moveRTP("left", .6, 50,robot,this,time);
-
+        robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lockOn();
         robot.moveRTP("right",.6,50,robot,this,time);
         robot.leftGripper.setPosition(0);
@@ -94,7 +94,7 @@ public class BlueSkystoneTracker extends LinearOpMode {
             imu.loop();
 
             // find errors
-            camError = (310 - (double) camera.getBorderX()) / 350;
+            camError = (300 - (double) camera.getBorderX()) / 350;
             imuError = (imu.getHeading() - imuTarget) / 60;
             disError = (10 - robot.getDistance()) / 20;
 
@@ -173,5 +173,9 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
     void lockOn() {
         lockOn(true,.1);
+    }
+
+    void lockOn(double accuracy) {
+        lockOn(true, accuracy);
     }
 }

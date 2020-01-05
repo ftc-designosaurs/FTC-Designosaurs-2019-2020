@@ -51,6 +51,12 @@ public class HardwareDesignosaurs {
 //    double heading = 0;
 
     // Define Variables
+    enum Direction {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT
+    }
     public double startEncoder;
     public double lastTime = 0;
     public double deltaTime = 0;
@@ -194,6 +200,7 @@ public class HardwareDesignosaurs {
         Robot.backLeft.setPower(speed);
     }
 
+    // TODO: use enums
     public void moveRTP(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
         // this function moves the specified number of inches in the given direction using acceleration ramps along with the built-in PIDs
         double encDist = distance / encoder_ticks_per_inch; // calculate distance in encoder counts
@@ -314,6 +321,44 @@ public class HardwareDesignosaurs {
         frontLeft.setMode(mode);
         backRight.setMode(mode);
         backLeft.setMode(mode);
+    }
+    
+    void runToDistance(Direction direction, double speed, double target, LinearOpMode opMode) {
+        runDirection(speed,direction);
+        while (distance.getDistance(DistanceUnit.INCH) < target){
+            opMode.idle();
+        }
+        setPowers(0);
+    }
+
+    void runDirection(double speed, Direction direction) {
+        if (direction == Direction.FORWARD) {
+            frontLeft.setPower(speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(speed);
+
+        } else if (direction == Direction.BACKWARD) {
+            frontLeft.setPower(speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(speed);
+        } else if (direction == Direction.LEFT) {
+            frontLeft.setPower(speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(speed);
+
+        } else if (direction == Direction.RIGHT) {
+            frontLeft.setPower(speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(speed);
+        }
+    }
+
+    void setPowers(double speed){
+        setPowers(this, speed);
     }
 }
 

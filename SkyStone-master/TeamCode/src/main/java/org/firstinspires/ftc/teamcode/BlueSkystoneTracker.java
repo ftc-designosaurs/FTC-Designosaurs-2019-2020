@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.robocol.RobocolConfig;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "Block Tracker", group = "Sensor")
-public class BlockTracker extends LinearOpMode {
+@Autonomous(name = "Blue Skystone Tracker", group = "!Auto")
+public class BlueSkystoneTracker extends LinearOpMode {
     CameraSubClass camera = new CameraSubClass();
     ImuSubClass imu = new ImuSubClass();
     HardwareDesignosaurs robot = new HardwareDesignosaurs();
@@ -34,6 +31,7 @@ public class BlockTracker extends LinearOpMode {
     double currTime;
 
     double fireAtWill = 0;
+    double imuTarget;
 
     @Override
     public void runOpMode() {
@@ -44,17 +42,51 @@ public class BlockTracker extends LinearOpMode {
 
         waitForStart();
         imu.loop();
-        double imuTarget = imu.getHeading();
+        imuTarget = imu.getHeading();
 
         robot.moveRTP("backward", .4, 20, robot, this, time);
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         lastTime = time.now(TimeUnit.MILLISECONDS);
-        while (opModeIsActive()) {
+        lockOn();
+        robot.moveRTP("right",.6,30,robot,this,time);
 
+        robot.leftGripper.setPosition(0);
+        robot.wait(1,this,time);
+
+        robot.moveRTP("left", .6, 50,robot,this,time);
+
+        lockOn();
+        robot.moveRTP("right",.6,50,robot,this,time);
+        robot.leftGripper.setPosition(0);
+        robot.wait(1,this,time);
+        robot.moveRTP("left",.6,10,robot,this,time);
+
+    }
+
+    double loopIntegral(double input, double cuttoff, double last, double deltaT, double intGain) {
+        double output;
+        if (input > cuttoff) {
+            output = 0;
+        } else {
+            output = last + (input * deltaT * intGain);
+        }
+        return output;
+    }
+
+    void lockOn(boolean auto, double accuracy){
+        double lastBad = 0;
+        if (auto) {
+            fireAtWill = 1;
+        } else {
+            fireAtWill = 0;
+        }
+        int firstFrame = camera.getImageCount();
+        lastTime = time.now(TimeUnit.MILLISECONDS);
+        while (opModeIsActive()) {
             // find delta time
             currTime = time.now(TimeUnit.MILLISECONDS);
-            deltTime = (currTime - lastTime)/1000;
+            deltTime = (currTime - lastTime) / 1000;
             lastTime = currTime;
 
             // loop sensors
@@ -62,30 +94,35 @@ public class BlockTracker extends LinearOpMode {
             imu.loop();
 
             // find errors
-            camError = (310 - (double) camera.getBorderX())/350;
-            imuError = (imu.getHeading() - imuTarget)/60;
-            disError = (10 - robot.getDistance())/20;
+            camError = (310 - (double) camera.getBorderX()) / 350;
+            imuError = (imu.getHeading() - imuTarget) / 60;
+            disError = (10 - robot.getDistance()) / 20;
 
-            if (Math.abs(camError) + Math.abs(disError) + Math.abs(imuError) < .1) {
-                telemetry.addData("good"," enough");
+            if (Math.abs(camError) + Math.abs(disError) + Math.abs(imuError) < accuracy) {
+                telemetry.addData("good", " enough");
                 if (fireAtWill == 1) {
                     fireAtWill = 2;
                 }
+            } else {
+                lastBad = time.now(TimeUnit.MILLISECONDS);
             }
-            telemetry.addData("totErr: ",Math.abs(camError)+Math.abs(imuError)+Math.abs(disError));
+            telemetry.addData("totErr: ", Math.abs(camError) + Math.abs(imuError) + Math.abs(disError));
 
             if (Math.abs(disError) > .5) {
                 disError = 0;
             }
+            if (camera.getBorderX() == -1 || camera.getImageCount() == firstFrame) {
+                camError = 0;
+            }
 
-            camError = Math.min(Math.max(camError, -.2),2);
-            imuError = Math.min(Math.max(imuError, -.2),2);
-            disError = Math.min(Math.max(disError, -.2),2);
+            camError = Math.min(Math.max(camError, -.2), 2);
+            imuError = Math.min(Math.max(imuError, -.2), 2);
+            disError = Math.min(Math.max(disError, -.2), 2);
 
 
-//            if (Math.abs(camError) > .5) {
-//                camError = 0;
-//            }
+            //            if (Math.abs(camError) > .5) {
+            //                camError = 0;
+            //            }
 
             // calculate integrals
             camInt = loopIntegral(camError, .2, camInt, deltTime, 0.1);
@@ -101,7 +138,7 @@ public class BlockTracker extends LinearOpMode {
             telemetry.addData("imuInt: ", imuInt);
             telemetry.addData("disInt: ", disInt);
             telemetry.update();
-            
+
             // calculate output
             camOut = camError + camInt;
             imuOut = imuError + imuInt;
@@ -123,24 +160,18 @@ public class BlockTracker extends LinearOpMode {
             // output to drivetrain
             robot.moveDirection(disOut, camOut, imuOut, robot);
 
-            if (gamepad1.b || fireAtWill == 2) {
-                robot.setPowers(robot,0);
-                robot.moveRTP("backward",.2,10,robot,this,time);
+            if (gamepad1.b || fireAtWill == 2 && time.now(TimeUnit.MILLISECONDS) - lastBad > 250 && camera.getImageCount() != firstFrame) {
+                robot.setPowers(robot, 0);
+                robot.moveRTP("backward", .2, 10, robot, this, time);
                 robot.leftGripper.setPosition(1);
-                robot.wait(1,this,time);
-                robot.moveRTP("forward",.2,10,robot,this,time);
+                robot.wait(1, this, time);
+                robot.moveRTP("forward", .2, 10, robot, this, time);
                 break;
             }
         }
     }
 
-    double loopIntegral(double input, double cuttoff, double last, double deltaT, double intGain) {
-        double output;
-        if (input > cuttoff) {
-            output = 0;
-        } else {
-            output = last + (input * deltaT * intGain);
-        }
-        return output;
+    void lockOn() {
+        lockOn(true,.1);
     }
 }

@@ -25,7 +25,8 @@ public class CameraSubClass {
     final boolean useWebcam = true;
     boolean awaitingCapture = false;
     int targetX = 380;
-    int borderX = 0;
+    int borderX = -1;
+    int images = 0;
     Border border = Border.NONE;
 
     VuforiaLocalizer vuforia;
@@ -109,6 +110,7 @@ public class CameraSubClass {
                     borderX = x;
                 }
                 awaitingCapture = false;
+                images++;
             }
         }));
     };
@@ -117,4 +119,7 @@ public class CameraSubClass {
         return borderX;
     }
 
+    int getImageCount() {
+        return  images;
+    }
 }

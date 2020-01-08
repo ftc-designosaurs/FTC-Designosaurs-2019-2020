@@ -141,6 +141,12 @@ public class HardwareDesignosaurs {
 
     }
 
+
+    public void init(HardwareMap ahwMap) {
+        init(ahwMap,0,0,0);
+    }
+
+
     // Functions
 //    public void initIMU() {
 //        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -297,6 +303,10 @@ public class HardwareDesignosaurs {
         backLeft.setDirection(DcMotor.Direction.FORWARD);
     }
 
+    public void moveRTP(Direction direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
+        moveRTP(direction.toString().toLowerCase(), maxSpeed, distance, Robot, opMode, time);
+    }
+
     void moveDirection(double north, double west, double rotate, HardwareDesignosaurs robot) {
         robot.frontLeft.setPower(-north + west + rotate);
         robot.frontRight.setPower(-north - west - rotate);
@@ -323,36 +333,40 @@ public class HardwareDesignosaurs {
         backLeft.setMode(mode);
     }
     
-    void runToDistance(Direction direction, double speed, double target, LinearOpMode opMode) {
+    void runToPost(Direction direction, double speed, double target, LinearOpMode opMode) {
         runDirection(speed,direction);
         while (distance.getDistance(DistanceUnit.INCH) < target){
+            opMode.idle();
+        }
+        while (distance.getDistance(DistanceUnit.INCH) > target){
             opMode.idle();
         }
         setPowers(0);
     }
 
     void runDirection(double speed, Direction direction) {
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         if (direction == Direction.FORWARD) {
-            frontLeft.setPower(speed);
-            frontRight.setPower(speed);
+            frontLeft.setPower(-speed);
+            frontRight.setPower(-speed);
             backLeft.setPower(speed);
             backRight.setPower(speed);
 
         } else if (direction == Direction.BACKWARD) {
             frontLeft.setPower(speed);
             frontRight.setPower(speed);
-            backLeft.setPower(speed);
-            backRight.setPower(speed);
+            backLeft.setPower(-speed);
+            backRight.setPower(-speed);
         } else if (direction == Direction.LEFT) {
-            frontLeft.setPower(speed);
+            frontLeft.setPower(-speed);
             frontRight.setPower(speed);
             backLeft.setPower(speed);
-            backRight.setPower(speed);
+            backRight.setPower(-speed);
 
         } else if (direction == Direction.RIGHT) {
             frontLeft.setPower(speed);
-            frontRight.setPower(speed);
-            backLeft.setPower(speed);
+            frontRight.setPower(-speed);
+            backLeft.setPower(-speed);
             backRight.setPower(speed);
         }
     }

@@ -48,7 +48,10 @@ public class BlueSkystoneTracker extends LinearOpMode {
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         lastTime = time.now(TimeUnit.MILLISECONDS);
-        lockOn();
+        lockOn(true,false,true,false,.05);
+        robot.moveRTP("right",.3,7,robot,this,time);
+        lockOn(true,true,false,true,.07);
+
         robot.moveRTP("right",.6,30,robot,this,time);
 
         robot.leftGripper.setPosition(0);
@@ -74,7 +77,8 @@ public class BlueSkystoneTracker extends LinearOpMode {
         return output;
     }
 
-    void lockOn(boolean auto, double accuracy){
+    void lockOn(boolean auto, boolean useCamera, boolean useDistance, boolean grab, double accuracy){
+        robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double lastBad = 0;
         if (auto) {
             fireAtWill = 1;
@@ -94,9 +98,17 @@ public class BlueSkystoneTracker extends LinearOpMode {
             imu.loop();
 
             // find errors
-            camError = (300 - (double) camera.getBorderX()) / 350;
+            if (useCamera) {
+                camError = (300 - (double) camera.getBorderX()) / 350;
+            } else {
+                camError = 0;
+            }
             imuError = (imu.getHeading() - imuTarget) / 60;
-            disError = (10 - robot.getDistance()) / 20;
+            if (useDistance) {
+                disError = (10 - robot.getDistance()) / 20;
+            } else {
+                disError = 0;
+            }
 
             if (Math.abs(camError) + Math.abs(disError) + Math.abs(imuError) < accuracy) {
                 telemetry.addData("good", " enough");
@@ -162,13 +174,19 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
             if (gamepad1.b || fireAtWill == 2 && time.now(TimeUnit.MILLISECONDS) - lastBad > 250 && camera.getImageCount() != firstFrame) {
                 robot.setPowers(robot, 0);
-                robot.moveRTP("backward", .2, 10, robot, this, time);
-                robot.leftGripper.setPosition(1);
-                robot.wait(1, this, time);
-                robot.moveRTP("forward", .2, 10, robot, this, time);
+                if (grab) {
+                    robot.moveRTP("backward", .2, 10, robot, this, time);
+                    robot.leftGripper.setPosition(1);
+                    robot.wait(1, this, time);
+                    robot.moveRTP("forward", .2, 10, robot, this, time);
+                }
                 break;
             }
         }
+    }
+
+    void lockOn(boolean auto, double accuracy) {
+        lockOn(auto, true, true, true, accuracy);
     }
 
     void lockOn() {

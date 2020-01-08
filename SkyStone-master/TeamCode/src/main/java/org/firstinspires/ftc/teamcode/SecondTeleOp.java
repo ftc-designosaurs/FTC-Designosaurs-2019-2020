@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name="Original Robot Mecanum Drive", group="!TeleOp")
-public class StandardTeleOp extends OpMode {
+@TeleOp(name="Second Robot Mecanum Drive", group="!TeleOp")
+public class SecondTeleOp extends OpMode {
 
     // variables
     boolean isLowGear = false;

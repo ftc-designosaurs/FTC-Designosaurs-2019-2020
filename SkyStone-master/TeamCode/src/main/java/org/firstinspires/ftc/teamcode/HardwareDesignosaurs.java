@@ -146,6 +146,27 @@ public class HardwareDesignosaurs {
         init(ahwMap,0,0,0);
     }
 
+    public void init2(HardwareMap ahwMap) {
+        // Initialize Motors
+        frontRight = hwMap.get(DcMotor.class,"front_right");
+        frontLeft = hwMap.get(DcMotor.class,"front_left");
+        backRight = hwMap.get(DcMotor.class,"back_right");
+        backLeft = hwMap.get(DcMotor.class,"back_left");
+        pitchMotor = hwMap.get(DcMotor.class, "pitch_motor");
+
+        // Initialize Servos
+
+        // Initialize Sensors
+
+        // Set Motor Directions
+
+        // Stop Motors
+
+        // Configure Encoders
+
+        // Set Servo Positions
+    }
+
 
     // Functions
 //    public void initIMU() {

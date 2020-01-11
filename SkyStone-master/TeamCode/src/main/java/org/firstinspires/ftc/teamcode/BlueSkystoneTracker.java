@@ -35,11 +35,32 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.addData("init","Camera");
+        telemetry.update();
         camera.init(hardwareMap, CameraSubClass.Border.LEFT);
+        telemetry.addData("init","Imu");
+        telemetry.update();
         imu.init(hardwareMap);
+        telemetry.addData("init","Robot");
+        telemetry.update();
         robot.init(hardwareMap,0,0,0);
+        telemetry.addData("init", "done");
+        telemetry.addData("selected", "Blue");
+        telemetry.update();
 
 
+        while (!isStopRequested() && !isStarted()) {
+            if (gamepad1.b) {
+                robot.flip = true;
+                telemetry.addData("selected", "Red");
+                telemetry.update();
+            }
+            if (gamepad1.a) {
+                robot.flip = true;
+                telemetry.addData("selected", "Blue");
+                telemetry.update();
+            }
+        }
         waitForStart();
         imu.loop();
         imuTarget = imu.getHeading();
@@ -99,7 +120,7 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
             // find errors
             if (useCamera) {
-                camError = (300 - (double) camera.getBorderX()) / 350;
+                camError = (290 - (double) camera.getBorderX()) / 350;
             } else {
                 camError = 0;
             }

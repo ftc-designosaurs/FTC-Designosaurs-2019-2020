@@ -84,48 +84,35 @@ public class SecondTeleOp extends OpMode {
 
         // set gripper location
         if (gamepad2.right_bumper){
-            Robot.mainGripper.setPosition(1);
+            Robot.mainGripperLeft.setPosition(1);
+            Robot.mainGripperRight.setPosition(.25);
+
         }
 
         if (gamepad2.left_bumper){
-            Robot.mainGripper.setPosition(.25);
+            Robot.mainGripperLeft.setPosition(.25);
+            Robot.mainGripperRight.setPosition(1);
+
         }
 
-        /*if (gamepad2.dpad_left) {
-            if (!wasPitchReset) {
-                wasPitchReset = true;
-                Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                Robot.pitchMotor.setPower(-0.1);
-            }
-        } else {
-            if (wasPitchReset) {
-                wasPitchReset = false;
-                Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-        }*/
-        //Robot.pitchMotor.setPower(gamepad2.left_stick_y/2.5);
-        Robot.liftMotor.setPower(gamepad2.left_stick_y/2);
+        Robot.liftMotor.setPower(gamepad2.left_stick_y);
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
-        telemetry.addData("pitch enc", Robot.pitchMotor.getCurrentPosition());
         telemetry.addData("fr",Robot.frontRight.getCurrentPosition());
         telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
         telemetry.addData("br",Robot.backRight.getCurrentPosition());
         telemetry.addData("bl",Robot.backLeft.getCurrentPosition());
         telemetry.update();
 
-        //set position of auto grippers
-        /*if (gamepad2.a) {
-            Robot.rightGripper.setPosition(0);
-        } else if (gamepad2.y) {
-            Robot.rightGripper.setPosition(1);
-        }*/
-
         if (gamepad2.dpad_up) {
             Robot.leftGripper.setPosition(0);
         } else if (gamepad2.dpad_down) {
             Robot.leftGripper.setPosition(1);
+        }
+        if (gamepad2.a) {
+            Robot.rightGripper.setPosition(1);
+        } else if (gamepad2.y) {
+            Robot.rightGripper.setPosition(0);
         }
 
         // set position of foundation manipulator
@@ -139,56 +126,12 @@ public class SecondTeleOp extends OpMode {
         } else if (gamepad1.right_bumper) {
             isLowGear = false;
         }
-        if (gamepad2.y) {
-            Robot.pitchMotor.setTargetPosition(658);
-            //Robot.pitchMotor.setPower(.8);
-        } else if (gamepad2.a) {
-            Robot.pitchMotor.setTargetPosition(0);
-            //Robot.pitchMotor.setPower(.8);
-        }
-        if (gamepad2.x) {
-            Robot.pitchMotor.setTargetPosition(724);
-        }
-        if (gamepad2.b) {
-            Robot.pitchMotor.setTargetPosition(1071);
-        }
-        if (Robot.pitchMotor.getCurrentPosition() < 456 || Robot.pitchMotor.getCurrentPosition() > 800) {
-            Robot.pitchMotor.setPower(.5);
-        } else {
-            Robot.pitchMotor.setPower(.1);
-
-        }
-
-        // set lift and pitch motor variables to macro positions
-        if (gamepad2.a) {
-            liftPos = liftPosOne;
-        } else if (gamepad2.b) {
-            liftPos = liftPosTwo;
-        } else if (gamepad2.y) {
-            liftPos = liftPosThree;
-        } else if (gamepad2.x) {
-            liftPos = liftPosFour;
-        }
-        if (gamepad2.dpad_left) {
-            pitchPos = pitchPosOne;
-        } else if (gamepad2.dpad_right) {
-            pitchPos = pitchPosTwo;
-        }
 
         if (gamepad2.left_trigger > .5) {
             Robot.capstoneGripper.setPosition(0);
         } else if (gamepad2.right_trigger > .5) {
             Robot.capstoneGripper.setPosition(1);
         }
-        // manually change lift and pitch vars
-        //liftPos += gamepad2.right_stick_y * deltaTime;
-        //pitchPos += gamepad2.left_stick_y * deltaTime;
-        //Robot.pitchMotor.setPower(0.7);
-        //Robot.liftMotor.setPower(0.7);
-        // set target positions based on vars
-        //Robot.pitchMotor.setTargetPosition(pitchPos);
-        //Robot.liftMotor.setTargetPosition(liftPos);
-
     }
 
     @Override

@@ -43,6 +43,9 @@ public class HardwareDesignosaurs {
     public Servo rightGripper       = null;
     public Servo capstoneGripper    = null;
 
+    public Servo mainGripperLeft    = null;
+    public Servo mainGripperRight    = null;
+
     // Define Sensors
     public DistanceSensor distance = null;
 //    public BNO055IMU imu = null;
@@ -57,6 +60,7 @@ public class HardwareDesignosaurs {
         LEFT,
         RIGHT
     }
+    public boolean flip = false;
     public double startEncoder;
     public double lastTime = 0;
     public double deltaTime = 0;
@@ -152,19 +156,48 @@ public class HardwareDesignosaurs {
         frontLeft = hwMap.get(DcMotor.class,"front_left");
         backRight = hwMap.get(DcMotor.class,"back_right");
         backLeft = hwMap.get(DcMotor.class,"back_left");
-        pitchMotor = hwMap.get(DcMotor.class, "pitch_motor");
+        liftMotor = hwMap.get(DcMotor.class, "lift_motor");
 
         // Initialize Servos
+        mainGripperRight = hwMap.get(Servo.class, "right_manipulator");
+        mainGripperLeft = hwMap.get(Servo.class, "left_manipulator");
+        foundationGripper = hwMap.get(Servo.class, "foundation_manipulator");
+        leftGripper = hwMap.get(Servo.class, "left_auto_manipulator");
+        rightGripper = hwMap.get(Servo.class, "right_auto_manipulator");
+        capstoneGripper = hwMap.get(Servo.class, "capstone_manipulator");
 
         // Initialize Sensors
+        distance = hwMap.get(DistanceSensor.class,"sensor_range");
 
         // Set Motor Directions
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
 
         // Stop Motors
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        backRight.setPower(0);
+        backLeft.setPower(0);
+        pitchMotor.setPower(0.7);
+        pitchMotor.setTargetPosition(0);
+
 
         // Configure Encoders
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set Servo Positions
+        mainGripperLeft.setPosition(1);
+        mainGripperRight.setPosition(1);
+        foundationGripper.setPosition(0.7);
+        leftGripper.setPosition(0);
+        rightGripper.setPosition(1);
+        capstoneGripper.setPosition(0);
     }
 
 
@@ -227,7 +260,6 @@ public class HardwareDesignosaurs {
         Robot.backLeft.setPower(speed);
     }
 
-    // TODO: use enums
     public void moveRTP(String direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
         // this function moves the specified number of inches in the given direction using acceleration ramps along with the built-in PIDs
         double encDist = distance / encoder_ticks_per_inch; // calculate distance in encoder counts
@@ -325,6 +357,7 @@ public class HardwareDesignosaurs {
     }
 
     public void moveRTP(Direction direction, double maxSpeed, double distance, HardwareDesignosaurs Robot, LinearOpMode opMode, ElapsedTime time) {
+        direction = maybeFlip(direction);
         moveRTP(direction.toString().toLowerCase(), maxSpeed, distance, Robot, opMode, time);
     }
 
@@ -333,6 +366,10 @@ public class HardwareDesignosaurs {
         robot.frontRight.setPower(-north - west - rotate);
         robot.backLeft.setPower(north - west + rotate);
         robot.backRight.setPower(north + west - rotate);
+    }
+
+    void moveDirection(double north, double west, double rotate) {
+        moveDirection(north,west,rotate,this);
     }
 
     double getDistance() {
@@ -355,6 +392,7 @@ public class HardwareDesignosaurs {
     }
     
     void runToPost(Direction direction, double speed, double target, LinearOpMode opMode) {
+        direction = maybeFlip(direction);
         runDirection(speed,direction);
         while (distance.getDistance(DistanceUnit.INCH) < target){
             opMode.idle();
@@ -394,6 +432,24 @@ public class HardwareDesignosaurs {
 
     void setPowers(double speed){
         setPowers(this, speed);
+    }
+
+    Direction flip(Direction direction) {
+        if (direction == Direction.RIGHT) {
+            return Direction.LEFT;
+        } else if (direction == Direction.LEFT) {
+            return Direction.RIGHT;
+        } else {
+            return direction;
+        }
+    }
+
+    Direction maybeFlip(Direction direction) {
+        if (flip) {
+            return flip(direction);
+        } else {
+            return direction;
+        }
     }
 }
 

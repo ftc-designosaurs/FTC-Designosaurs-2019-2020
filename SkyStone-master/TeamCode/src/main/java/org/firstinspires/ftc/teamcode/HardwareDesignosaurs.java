@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -44,11 +45,12 @@ public class HardwareDesignosaurs {
     public Servo capstoneGripper    = null;
 
     public Servo mainGripperLeft    = null;
-    public Servo mainGripperRight    = null;
+    public Servo mainGripperRight   = null;
 
     // Define Sensors
-    public DistanceSensor distance = null;
-//    public BNO055IMU imu = null;
+    public DistanceSensor distance  = null;
+    public TouchSensor limitSwitch  = null;
+    //    public BNO055IMU imu = null;
 //    Orientation angles = null;
 //    Acceleration gravity;
 //    double heading = 0;
@@ -150,7 +152,7 @@ public class HardwareDesignosaurs {
         init(ahwMap,0,0,0);
     }
 
-    public void init2(HardwareMap ahwMap) {
+    public void init2(HardwareMap hwMap) {
         // Initialize Motors
         frontRight = hwMap.get(DcMotor.class,"front_right");
         frontLeft = hwMap.get(DcMotor.class,"front_left");
@@ -168,20 +170,23 @@ public class HardwareDesignosaurs {
 
         // Initialize Sensors
         distance = hwMap.get(DistanceSensor.class,"sensor_range");
+        try {
+            limitSwitch = hwMap.get(TouchSensor.class,"touch_sensor");
+
+        } catch (Exception e) {}
 
         // Set Motor Directions
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Stop Motors
         frontRight.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
-        pitchMotor.setPower(0.7);
-        pitchMotor.setTargetPosition(0);
 
 
         // Configure Encoders
@@ -193,36 +198,22 @@ public class HardwareDesignosaurs {
 
         // Set Servo Positions
         mainGripperLeft.setPosition(1);
-        mainGripperRight.setPosition(1);
+        mainGripperRight.setPosition(.25);
         foundationGripper.setPosition(0.7);
         leftGripper.setPosition(0);
         rightGripper.setPosition(1);
         capstoneGripper.setPosition(0);
     }
 
+    public void init2(HardwareMap hwMap, int xPos, int yPos, int thetaPos) {
+        init2(hwMap);
+    }
+
+    public void initDrive(HardwareMap hwmap) {
+
+    }
 
     // Functions
-//    public void initIMU() {
-//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-//        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-//        parameters.loggingEnabled      = true;
-//        parameters.loggingTag          = "IMU";
-//        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-//
-//        imu.initialize(parameters);
-//
-//        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-//
-//    }
-//
-//
-//    public void updateIMU() {
-//        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-//        heading = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle));
-//    }
-
 
     public double square(double base, int power) { //function that does fractional squaring
         if (base == 0) {
@@ -450,6 +441,10 @@ public class HardwareDesignosaurs {
         } else {
             return direction;
         }
+    }
+
+    double limit(double input, double max, double min) {
+        return Math.max(Math.min(input,max),min);
     }
 }
 

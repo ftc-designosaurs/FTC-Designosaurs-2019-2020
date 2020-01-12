@@ -35,9 +35,9 @@ public class ImuSubClass {
         return heading;
     }
 
-    void turn(double degrees, double speed, double accuracy, double pGain, HardwareDesignosaurs robot, ElapsedTime time, LinearOpMode opmode) {
+    void turn(double degrees, double speed, double accuracy, double settleTime, double pGain, HardwareDesignosaurs robot, ElapsedTime time, LinearOpMode opmode) {
         loop();
-        double target = getHeading();
+        double target = getHeading() + degrees;
         double lastBad = 0;
         double lastTime = time.now(TimeUnit.MILLISECONDS);
         while (opmode.opModeIsActive()) {
@@ -47,10 +47,26 @@ public class ImuSubClass {
 
             loop();
             double error = target - getHeading();
-            double output = error/pGain;
+            double output = robot.limit(error/pGain,speed,-speed);
             robot.moveDirection(0,0,output);
+
+            if (error < .2) {
+                if (time.now(TimeUnit.MILLISECONDS) - lastBad > settleTime) {
+                    robot.setPowers(0);
+                    break;
+                }
+            } else {
+                lastBad = time.now(TimeUnit.MILLISECONDS);
+            }
         }
 
+    }
+
+    void turn(double degrees, double speed, HardwareDesignosaurs robot, ElapsedTime time, LinearOpMode opMode) {
+        turn(degrees, speed, .2, 250, 1/40, robot, time, opMode);
+    }
+    void turn(double degrees, HardwareDesignosaurs robot, ElapsedTime time, LinearOpMode opMode) {
+        turn(degrees, .2, robot, time, opMode);
     }
 
 }

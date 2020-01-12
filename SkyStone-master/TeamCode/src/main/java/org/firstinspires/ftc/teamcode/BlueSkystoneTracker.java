@@ -35,6 +35,24 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        time.reset();
+        telemetry.addData("selected", "Blue");
+        telemetry.update();
+        while (!isStopRequested() && time.milliseconds() < 5000) {
+        if (gamepad1.b) {
+            robot.flip = true;
+            telemetry.addData("selected", "Red");
+            telemetry.update();
+        }
+        if (gamepad1.x) {
+            robot.flip = false;
+            telemetry.addData("selected", "Blue");
+            telemetry.update();
+        }
+        if (gamepad1.a) {
+
+        }
+    }
         telemetry.addData("init","Camera");
         telemetry.update();
         camera.init(hardwareMap, CameraSubClass.Border.LEFT);
@@ -43,24 +61,13 @@ public class BlueSkystoneTracker extends LinearOpMode {
         imu.init(hardwareMap);
         telemetry.addData("init","Robot");
         telemetry.update();
-        robot.init(hardwareMap,0,0,0);
+        robot.init2(hardwareMap,0,0,0);
         telemetry.addData("init", "done");
-        telemetry.addData("selected", "Blue");
+        telemetry.addData("selected", robot.flip ? "Red" : "Blue");
         telemetry.update();
 
 
-        while (!isStopRequested() && !isStarted()) {
-            if (gamepad1.b) {
-                robot.flip = true;
-                telemetry.addData("selected", "Red");
-                telemetry.update();
-            }
-            if (gamepad1.a) {
-                robot.flip = true;
-                telemetry.addData("selected", "Blue");
-                telemetry.update();
-            }
-        }
+
         waitForStart();
         imu.loop();
         imuTarget = imu.getHeading();

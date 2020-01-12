@@ -12,17 +12,6 @@ public class SecondTeleOp extends OpMode {
 
     // variables
     boolean isLowGear = false;
-    boolean isPitchLowGear = false;
-    boolean wasPitchReset = false;
-    int pitchPos = 0;
-    static int pitchPosOne = 0;
-    static int pitchPosTwo = 324;
-
-    int liftPos = 0;
-    static int liftPosOne = 0;
-    static int liftPosTwo = 100;
-    static int liftPosThree = 200;
-    static int liftPosFour = 300;
 
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();
@@ -33,13 +22,10 @@ public class SecondTeleOp extends OpMode {
 
     @Override
     public void init() {
-        Robot.init(hardwareMap, 0, 0, 0); //initialize motors and sensors
+        Robot.init2(hardwareMap); //initialize motors and sensors
 
         telemetry.addData("status: ", "Ready!");
-        Robot.pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //Robot.pitchMotor.setTargetPosition(pitchPos);
-        Robot.pitchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Robot.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -53,9 +39,9 @@ public class SecondTeleOp extends OpMode {
         lastTime = runtime.now(TimeUnit.MILLISECONDS);
 
         // set joystick variables
-        lh = gamepad1.left_stick_x;
+        lh = -gamepad1.left_stick_x;
         lv = -gamepad1.left_stick_y;
-        rh = gamepad1.right_stick_x;
+        rh = -gamepad1.right_stick_x;
 
         // square for exponential drive
         lh = Robot.square(lh, Robot.power);
@@ -63,10 +49,10 @@ public class SecondTeleOp extends OpMode {
         rh = Robot.square(rh, Robot.power);
 
         // calculate motor powers for mecanum drive
-        fl = -lv + lh + rh;
-        fr = -lv - lh - rh;
-        bl = lv - lh + rh;
-        br = lv + lh - rh;
+        fl = -lv + rh + lh;
+        fr = -lv - rh - lh;
+        bl = lv - rh + lh;
+        br = lv + rh - lh;
 
         // set motor speeds
         if (isLowGear) {
@@ -95,13 +81,30 @@ public class SecondTeleOp extends OpMode {
 
         }
 
-        Robot.liftMotor.setPower(gamepad2.left_stick_y);
+        if (Robot.limitSwitch.isPressed() && !gamepad2.x) {
+            Robot.liftMotor.setPower(Math.min(0,gamepad2.left_stick_y));
+        } else if (Robot.liftMotor.getCurrentPosition() <= -4650 && !gamepad2.x) {
+            Robot.liftMotor.setPower(Math.max(0,gamepad2.left_stick_y));
+        } else {
+            Robot.liftMotor.setPower(gamepad2.left_stick_y);
+        }
+
+        if (gamepad2.b) {
+            if (Robot.limitSwitch.isPressed()){
+                Robot.liftMotor.setPower(0);
+                Robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Robot.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            } else {
+                Robot.liftMotor.setPower(.5);
+            }
+        }
 
         telemetry.addData("lift enc", Robot.liftMotor.getCurrentPosition());
         telemetry.addData("fr",Robot.frontRight.getCurrentPosition());
         telemetry.addData("fl",Robot.frontLeft.getCurrentPosition());
         telemetry.addData("br",Robot.backRight.getCurrentPosition());
         telemetry.addData("bl",Robot.backLeft.getCurrentPosition());
+        telemetry.addData("touch",Robot.limitSwitch.isPressed());
         telemetry.update();
 
         if (gamepad2.dpad_up) {

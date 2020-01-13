@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 // this autonomous program finds the skystones on the blue side and delivers them
+@Disabled
 @Autonomous(name="Blue Skystone One Block", group="Mechanum")
 public class BlueSkystoneAutoOneBlock extends LinearOpMode{
 

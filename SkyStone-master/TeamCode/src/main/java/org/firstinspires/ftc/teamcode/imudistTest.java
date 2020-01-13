@@ -50,6 +50,7 @@ package org.firstinspires.ftc.teamcode;
         import java.util.Locale;
 
 
+@Disabled
 @TeleOp(name = "imu dist test", group = "Sensor")
 //@Disabled                            // Comment this out to add to the opmode list
 public class imudistTest extends LinearOpMode

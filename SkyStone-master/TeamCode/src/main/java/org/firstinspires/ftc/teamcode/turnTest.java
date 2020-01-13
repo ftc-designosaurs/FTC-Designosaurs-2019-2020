@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 public class turnTest extends LinearOpMode {
     HardwareDesignosaurs robot = new HardwareDesignosaurs();
     ImuSubClass imu = new ImuSubClass();
@@ -10,7 +11,7 @@ public class turnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot.init(hardwareMap);
+        robot.init2(hardwareMap);
         imu.init(hardwareMap);
 
         waitForStart();

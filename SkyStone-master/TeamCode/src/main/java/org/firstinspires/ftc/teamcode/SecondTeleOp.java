@@ -39,9 +39,9 @@ public class SecondTeleOp extends OpMode {
         lastTime = runtime.now(TimeUnit.MILLISECONDS);
 
         // set joystick variables
-        lh = -gamepad1.left_stick_x;
+        lh = gamepad1.left_stick_x;
         lv = -gamepad1.left_stick_y;
-        rh = -gamepad1.right_stick_x;
+        rh = gamepad1.right_stick_x;
 
         // square for exponential drive
         lh = Robot.square(lh, Robot.power);
@@ -49,10 +49,10 @@ public class SecondTeleOp extends OpMode {
         rh = Robot.square(rh, Robot.power);
 
         // calculate motor powers for mecanum drive
-        fl = -lv + rh + lh;
-        fr = -lv - rh - lh;
-        bl = lv - rh + lh;
-        br = lv + rh - lh;
+        fl = -lv + lh + rh;
+        fr = -lv - lh - rh;
+        bl = lv - lh + rh;
+        br = lv + lh - rh;
 
         // set motor speeds
         if (isLowGear) {

@@ -154,8 +154,9 @@ public class HardwareDesignosaurs {
 
     public void init2(HardwareMap hwMap) {
         // Initialize Motors
-        frontRight = hwMap.get(DcMotor.class,"front_right");
-        frontLeft = hwMap.get(DcMotor.class,"front_left");
+        // the FR & FL motors are intentionally switched due to a bug
+        frontRight = hwMap.get(DcMotor.class,"front_left");
+        frontLeft = hwMap.get(DcMotor.class,"front_right");
         backRight = hwMap.get(DcMotor.class,"back_right");
         backLeft = hwMap.get(DcMotor.class,"back_left");
         liftMotor = hwMap.get(DcMotor.class, "lift_motor");
@@ -176,8 +177,8 @@ public class HardwareDesignosaurs {
         } catch (Exception e) {}
 
         // Set Motor Directions
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         liftMotor.setDirection(DcMotor.Direction.REVERSE);

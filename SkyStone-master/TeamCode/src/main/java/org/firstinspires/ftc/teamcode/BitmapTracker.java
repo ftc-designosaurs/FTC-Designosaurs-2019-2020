@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.ThreadPool;
@@ -22,6 +23,7 @@ import java.util.Locale;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+@Disabled
 @Autonomous(name = "Bitmap tracker", group = "Sensor")
 public class BitmapTracker extends LinearOpMode {
     final boolean diaplayMonitor = true;

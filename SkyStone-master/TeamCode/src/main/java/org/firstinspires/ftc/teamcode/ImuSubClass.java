@@ -50,13 +50,18 @@ public class ImuSubClass {
             double output = robot.limit(error/pGain,speed,-speed);
             robot.moveDirection(0,0,output);
 
+            opmode.telemetry.addData("target",target);
+            opmode.telemetry.addData("current",getHeading());
+            opmode.telemetry.addData("error",error);
+            opmode.telemetry.addData("time good",currTime - lastBad);
+            opmode.telemetry.update();
             if (error < .2) {
-                if (time.now(TimeUnit.MILLISECONDS) - lastBad > settleTime) {
+                if (currTime - lastBad > settleTime) {
                     robot.setPowers(0);
                     break;
                 }
             } else {
-                lastBad = time.now(TimeUnit.MILLISECONDS);
+                lastBad = currTime;
             }
         }
 

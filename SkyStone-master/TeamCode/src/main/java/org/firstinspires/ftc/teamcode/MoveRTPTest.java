@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
+@Deprecated
 @Autonomous(name="RTP Test", group="test")
 public class MoveRTPTest extends LinearOpMode {
 

@@ -47,6 +47,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import java.util.Locale;
 
 @Disabled
+@Deprecated
 @TeleOp(name = "Sensor: BNO055 IMU test move", group = "Sensor")
 //@Disabled                            // Comment this out to add to the opmode list
 public class imuTest2 extends LinearOpMode

@@ -26,6 +26,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 @Disabled
+@Deprecated
 @Autonomous(name = "Camera Test OpMode TF", group = "Camera")
 public class CameraTestTensorflow extends LinearOpMode {
 

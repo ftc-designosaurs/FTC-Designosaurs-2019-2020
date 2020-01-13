@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 // this autonomous program finds the skystones on the blue side and delivers them
 @Disabled
+@Deprecated
 @Autonomous(name="Blue Skystone", group="Mechanum")
 public class BlueSkystoneAuto extends LinearOpMode{
 

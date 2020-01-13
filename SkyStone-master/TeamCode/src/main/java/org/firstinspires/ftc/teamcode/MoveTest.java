@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
+@Deprecated
 @Autonomous(name="RTP Test no function", group="test")
 public class MoveTest extends LinearOpMode {
 

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="Red Foundation", group="Mechanum")
+@Deprecated
 public class RedFoundationMove extends LinearOpMode{
 
     HardwareDesignosaurs Robot = new HardwareDesignosaurs();

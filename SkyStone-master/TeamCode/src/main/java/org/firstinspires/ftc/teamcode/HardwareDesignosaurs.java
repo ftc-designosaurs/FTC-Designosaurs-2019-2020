@@ -60,7 +60,9 @@ public class HardwareDesignosaurs {
         FORWARD,
         BACKWARD,
         LEFT,
-        RIGHT
+        RIGHT,
+        CW,
+        CCW
     }
     public boolean flip = false;
     public double startEncoder;
@@ -446,6 +448,10 @@ public class HardwareDesignosaurs {
 
     double limit(double input, double max, double min) {
         return Math.max(Math.min(input,max),min);
+    }
+
+    double limit (double input, double max) {
+        return limit(input,max,-max);
     }
 }
 

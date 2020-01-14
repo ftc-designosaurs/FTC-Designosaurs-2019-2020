@@ -70,28 +70,31 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
         waitForStart();
         imu.loop();
-        imuTarget = imu.getHeading();
+        imuTarget = imu.getHeading() + 90;
 
-        robot.moveRTP("backward", .4, 20, robot, this, time);
+        robot.moveRTP("right", .4,12,robot,this,time);
+        imu.turnSimp(90,robot,this);
+        //lockOn(false,false, .4);
+
+        robot.moveRTP(HardwareDesignosaurs.Direction.BACKWARD, .4, 6, robot, this, time);
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lastTime = time.now(TimeUnit.MILLISECONDS);
-        lockOn(true,false,true,false,.05);
-        robot.moveRTP("right",.3,7,robot,this,time);
-        lockOn(true,true,false,true,.07);
+        lockOn(true,false,true,false,.1);
+        robot.moveRTP(HardwareDesignosaurs.Direction.RIGHT,.3,7,robot,this,time);
+        lockOn(true,true,false,true,.1);
 
-        robot.moveRTP("right",.6,30,robot,this,time);
+        robot.moveRTP(HardwareDesignosaurs.Direction.RIGHT,.6,30,robot,this,time);
 
         robot.leftGripper.setPosition(0);
         robot.wait(1,this,time);
 
-        robot.moveRTP("left", .6, 50,robot,this,time);
+        robot.moveRTP(HardwareDesignosaurs.Direction.LEFT, .6, 50,robot,this,time);
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lockOn();
-        robot.moveRTP("right",.6,50,robot,this,time);
+        robot.moveRTP(HardwareDesignosaurs.Direction.RIGHT,.6,50,robot,this,time);
         robot.leftGripper.setPosition(0);
         robot.wait(1,this,time);
-        robot.moveRTP("left",.6,10,robot,this,time);
+        robot.moveRTP(HardwareDesignosaurs.Direction.LEFT,.6,10,robot,this,time);
 
     }
 
@@ -105,7 +108,7 @@ public class BlueSkystoneTracker extends LinearOpMode {
         return output;
     }
 
-    void lockOn(boolean auto, boolean useCamera, boolean useDistance, boolean grab, double accuracy){
+    void lockOn(boolean auto, boolean useCamera, boolean useDistance, boolean grab, double accuracy, double maxSpeed){
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double lastBad = 0;
         if (auto) {
@@ -155,9 +158,12 @@ public class BlueSkystoneTracker extends LinearOpMode {
                 camError = 0;
             }
 
-            camError = Math.min(Math.max(camError, -.2), 2);
-            imuError = Math.min(Math.max(imuError, -.2), 2);
-            disError = Math.min(Math.max(disError, -.2), 2);
+            camError = robot.limit(camError,maxSpeed);
+            imuError = robot.limit(imuError,maxSpeed);
+            disError = robot.limit(disError,maxSpeed);
+//            camError = Math.min(Math.max(camError, -.2), 2);
+//            imuError = Math.min(Math.max(imuError, -.2), 2);
+//            disError = Math.min(Math.max(disError, -.2), 2);
 
 
             //            if (Math.abs(camError) > .5) {
@@ -213,7 +219,11 @@ public class BlueSkystoneTracker extends LinearOpMode {
         }
     }
 
-    void lockOn(boolean auto, double accuracy) {
+    void lockOn(boolean auto, boolean useCamera, boolean useDistance, boolean grab, double accuracy){
+        lockOn(auto,useCamera,useDistance,grab,accuracy,.2);
+    }
+
+        void lockOn(boolean auto, double accuracy) {
         lockOn(auto, true, true, true, accuracy);
     }
 
@@ -223,5 +233,13 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
     void lockOn(double accuracy) {
         lockOn(true, accuracy);
+    }
+
+    void lockOn(boolean camera, boolean distance, double speed) {
+        lockOn(true, camera, distance, true, .1, speed);
+    }
+
+    void lockOn(boolean camera, boolean distance) {
+        lockOn(true, camera, distance, true, .1, .2);
     }
 }

@@ -72,16 +72,17 @@ public class BlueSkystoneTracker extends LinearOpMode {
         imu.loop();
         imuTarget = imu.getHeading() + 90;
 
-        robot.moveRTP("right", .4,12,robot,this,time);
+        robot.moveRTP("right", .4,13.5,robot,this,time);
+        robot.moveRTP("forward", .4,2,robot,this,time);
+        robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         imu.turnSimp(90,robot,this);
         //lockOn(false,false, .4);
 
         robot.moveRTP(HardwareDesignosaurs.Direction.BACKWARD, .4, 6, robot, this, time);
         robot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lockOn(true,false,true,false,.1);
-        robot.moveRTP(HardwareDesignosaurs.Direction.RIGHT,.3,7,robot,this,time);
-        lockOn(true,true,false,true,.1);
+        lockOn(true,true,true,false,.1);
+
 
         robot.moveRTP(HardwareDesignosaurs.Direction.RIGHT,.6,30,robot,this,time);
 
@@ -130,13 +131,13 @@ public class BlueSkystoneTracker extends LinearOpMode {
 
             // find errors
             if (useCamera) {
-                camError = (290 - (double) camera.getBorderX()) / 350;
+                camError = (500 - (double) camera.getBorderX()) / 350;
             } else {
                 camError = 0;
             }
             imuError = (imu.getHeading() - imuTarget) / 60;
             if (useDistance) {
-                disError = (10 - robot.getDistance()) / 20;
+                disError = (8 - robot.getDistance()) / 15;
             } else {
                 disError = 0;
             }
@@ -154,7 +155,7 @@ public class BlueSkystoneTracker extends LinearOpMode {
             if (Math.abs(disError) > .5) {
                 disError = 0;
             }
-            if (camera.getBorderX() == -1 || camera.getImageCount() == firstFrame) {
+            if ( camera.getImageCount() == firstFrame) {
                 camError = 0;
             }
 
@@ -209,10 +210,11 @@ public class BlueSkystoneTracker extends LinearOpMode {
             if (gamepad1.b || fireAtWill == 2 && time.now(TimeUnit.MILLISECONDS) - lastBad > 250 && camera.getImageCount() != firstFrame) {
                 robot.setPowers(robot, 0);
                 if (grab) {
-                    robot.moveRTP("backward", .2, 10, robot, this, time);
+                    robot.moveRTP("right",.2,3,robot,this,time);
+                    robot.moveRTP("backward", .2, 7, robot, this, time);
                     robot.leftGripper.setPosition(1);
                     robot.wait(1, this, time);
-                    robot.moveRTP("forward", .2, 10, robot, this, time);
+                    robot.moveRTP("forward", .2, 7, robot, this, time);
                 }
                 break;
             }

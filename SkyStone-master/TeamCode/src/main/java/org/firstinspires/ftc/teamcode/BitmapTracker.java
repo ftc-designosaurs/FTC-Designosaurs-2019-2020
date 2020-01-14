@@ -23,8 +23,7 @@ import java.util.Locale;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-@Disabled
-@Deprecated
+
 @Autonomous(name = "Bitmap tracker", group = "Sensor")
 public class BitmapTracker extends LinearOpMode {
     final boolean diaplayMonitor = true;
